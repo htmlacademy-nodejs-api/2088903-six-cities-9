@@ -1,10 +1,9 @@
 import { Command } from './commands/command.interface.js';
 import { CommandParser } from './command-parser.js';
 
-type CommandCollection = Record<string, Command>;
 
 export class CLIApplication {
-  private commands: CommandCollection = {};
+  private commands: Record<string, Command> = {};
 
   constructor(
     private readonly defaultCommand: string = '--help'
@@ -24,7 +23,7 @@ export class CLIApplication {
   }
 
   public getDefaultCommand(): Command | never {
-    if (! this.commands[this.defaultCommand]) {
+    if (!this.commands[this.defaultCommand]) {
       throw new Error(`The default command (${this.defaultCommand}) is not registered.`);
     }
     return this.commands[this.defaultCommand];
