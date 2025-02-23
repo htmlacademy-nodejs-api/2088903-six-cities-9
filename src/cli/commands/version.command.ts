@@ -12,7 +12,7 @@ export class VersionCommand implements Command {
     private readonly filePath: string = 'package.json'
   ) {}
 
-  private isPackageJSONConfig(value: unknown): value is PackageJSONConfig {
+  static isPackageJSONConfig(value: unknown): value is PackageJSONConfig {
     return (
       typeof value === 'object' &&
       value !== null &&
@@ -25,7 +25,7 @@ export class VersionCommand implements Command {
     const jsonContent = readFileSync(resolve(this.filePath), 'utf-8');
     const importedContent: unknown = JSON.parse(jsonContent);
 
-    if (! this.isPackageJSONConfig(importedContent)) {
+    if (!VersionCommand.isPackageJSONConfig(importedContent)) {
       throw new Error('Failed to parse json content.');
     }
 

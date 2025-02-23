@@ -8,6 +8,9 @@ export class ImportCommand implements Command {
 
   public execute(...parameters: string[]): void {
     const [filename] = parameters;
+    if (!filename) {
+      throw new Error('Filename is missing in parameters');
+    }
     const fileReader = new TSVFileReader(filename.trim());
 
     try {
