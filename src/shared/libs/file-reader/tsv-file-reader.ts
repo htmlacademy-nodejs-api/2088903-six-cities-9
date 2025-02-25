@@ -1,7 +1,13 @@
 import { readFileSync } from 'node:fs';
 
 import { FileReader } from './file-reader.interface.js';
-import { Offer, OfferType, User } from '../../types/index.js';
+import { Offer } from '../../types/index.js';
+import { CityType } from '../../types/city-type.enum.js';
+import { AccommodationType } from '../../types/accommodation-type.enum.js';
+import { UserType } from '../../types/user-type.enum.js';
+
+import {COMMA, DECIMAL, NEWLINE, TAB} from '../../../const.js';
+
 
 export class TSVFileReader implements FileReader {
   private rawData = '';
@@ -10,7 +16,16 @@ export class TSVFileReader implements FileReader {
     private readonly filename: string
   ) {}
 
-  private validateRawData(): void {
+  public read () {
+    this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
+  }
+
+  public toArray (): Offer[] {
+    this.validateRawData();
+    return this.parseRawDataToOffers();
+  }
+
+  private validateRawData (): void {
     if (!this.rawData) {
       throw new Error('File was not read');
     }
@@ -18,7 +33,7 @@ export class TSVFileReader implements FileReader {
 
   private parseRawDataToOffers(): Offer[] {
     return this.rawData
-      .split('\n')
+      .split(NEWLINE)
       .filter((row) => row.trim().length)
       .map((line) => this.parseLineToOffer(line));
   }
@@ -28,46 +43,65 @@ export class TSVFileReader implements FileReader {
       title,
       description,
       createdDate,
-      image,
-      type,
+      city,
+      preview,
+      images,
+      isPremium,
+      isFavorite,
+      rating,
+      accommodation,
+      rooms,
+      guests,
       price,
-      categories,
-      firstname,
-      lastname,
+      amenities,
+      userName,
       email,
-      avatarPath
-    ] = line.split('\t');
+      avatar,
+      password,
+      userType,
+      commentsCount,
+      location,
+    ] = line.split(TAB);
 
     return {
       title,
       description,
-      postDate: new Date(createdDate),
-      image,
-      type: OfferType[type as 'Buy' | 'Sell'],
-      categories: this.parseCategories(categories),
-      price: this.parsePrice(price),
-      user: this.parseUser(firstname, lastname, email, avatarPath),
+      date: new Date(createdDate),
+      city: CityType[city as 'Paris'| 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf'],
+      preview,
+      images: this.parseToArray(images),
+      isPremium: this.parseBoolean(isPremium),
+      isFavorite: this.parseBoolean(isFavorite),
+      rating: this.parseToNum(rating),
+      accommodation: AccommodationType[accommodation as 'Apartment' | 'House' | 'Room' | 'Hotel'],
+      rooms: this.parseToNum(rooms),
+      guests: this.parseToNum(guests),
+      price: this.parseToNum(price),
+      amenities: this.parseToArray(amenities),
+      host: {
+        email,
+        name: userName,
+        avatar,
+        password,
+        type: UserType[userType as 'Pro' | 'Regular']
+      },
+      commentsCount: this.parseToNum(commentsCount),
+      location: {
+        latitude: Number(this.parseToArray(location)[0]),
+        longitude: Number(this.parseToArray(location)[1]),
+      },
     };
   }
 
-  private parseCategories(categoriesString: string): { name: string }[] {
-    return categoriesString.split(';').map((name) => ({ name }));
+  private parseBoolean(string: string): boolean {
+    return string === 'true';
   }
 
-  private parsePrice(priceString: string): number {
-    return Number.parseInt(priceString, 10);
+  private parseToArray<T> (string: string): T[] {
+    return string.split(COMMA).map((name) => name as T);
   }
 
-  private parseUser(firstname: string, lastname: string, email: string, avatarPath: string): User {
-    return { email, firstname, lastname, avatarPath };
-  }
-
-  public read(): void {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
-  }
-
-  public toArray(): Offer[] {
-    this.validateRawData();
-    return this.parseRawDataToOffers();
+  private parseToNum (dataString: string): number {
+    return Number.parseInt(dataString, DECIMAL);
   }
 }
