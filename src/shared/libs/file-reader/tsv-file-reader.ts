@@ -73,7 +73,7 @@ export class TSVFileReader implements FileReader {
       isPremium: this.parseBoolean(isPremium),
       isFavorite: this.parseBoolean(isFavorite),
       rating: this.parseToNum(rating),
-      accommodation: AccommodationType[accommodation as 'Apartment' | 'House' | 'Room' | 'Hotel'],
+      accommodation: AccommodationType[accommodation as 'apartment' | 'house' | 'room' | 'hotel'],
       rooms: this.parseToNum(rooms),
       guests: this.parseToNum(guests),
       price: this.parseToNum(price),
@@ -83,7 +83,7 @@ export class TSVFileReader implements FileReader {
         name: userName,
         avatar,
         password,
-        type: UserType[userType as 'Pro' | 'Regular']
+        type: this.parseUserType(userType),
       },
       commentsCount: this.parseToNum(commentsCount),
       location: {
@@ -95,6 +95,10 @@ export class TSVFileReader implements FileReader {
 
   private parseBoolean(string: string): boolean {
     return string === 'true';
+  }
+
+  private parseUserType(string: string): UserType {
+    return string === UserType.Pro ? UserType.Pro : UserType.Regular;
   }
 
   private parseToArray<T> (string: string): T[] {
