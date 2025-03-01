@@ -1,20 +1,20 @@
-import { CityType } from './city-type.enum.js';
+import { CityName } from './city-name.enum.js';
 import { Amenities } from './amenities.enum.js';
 import { Location } from './location.type.js';
-import { AccommodationType } from './accommodation-type.enum.js';
+import { Accommodation } from './accommodation.enum.js';
 import { User } from './user.type.js';
 
 export type Offer = {
   title: string;
   description: string;
   date: Date;
-  city: CityType;
+  city: CityName;
   preview: string;
   images: string[];
   isPremium: boolean;
   isFavorite: boolean;
   rating: number;
-  accommodation: AccommodationType,
+  accommodation: Accommodation,
   rooms: number;
   guests: number;
   price: number;

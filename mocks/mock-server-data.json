@@ -1,0 +1,121 @@
+{
+  "api": {
+    "titles": [
+      "Домик у пруда — волшебное место",
+      "Хорошая, уютная квартира с большой теплой кроватью",
+      "Вид на канал гараж",
+      "Лофт-студия в центре",
+      "Деревянный дом"
+
+    ],
+    "descriptions": [
+      "В квартире есть просторная гостиная с кухней, одна спальня и ванная комната с ванной. Летом можно пользоваться террасой.",
+      "Дизайнерский интерьер в самом симпатичном районе! Полностью отремонтированная, хорошо оборудованная, уютная студия.",
+      "Спокойная улица, быстрая связь с центром и аэропортом.",
+      "Прекрасный район, много модных магазинов, ресторанов и баров в пешей доступности.",
+      "Откройте для себя повседневную местную жизнь в центре города, дружелюбный район, подпольное казино."
+
+    ],
+    "cities": [
+      {
+        "name": "Paris",
+        "location": {
+          "latitude": 48.85661,
+          "longitude": 2.351499
+        }
+      },
+      {
+        "name": "Cologne",
+        "location": {
+          "latitude": 50.938361,
+          "longitude": 6.959974
+        }
+      },
+      {
+        "name": "Brussels",
+        "location": {
+          "latitude": 50.846557,
+          "longitude": 4.351697
+        }
+      },
+      {
+        "name": "Amsterdam",
+        "location": {
+          "latitude": 52.370216,
+          "longitude": 4.895168
+        }
+      },
+      {
+        "name": "Hamburg",
+        "location": {
+          "latitude": 53.550341,
+          "longitude": 10.000654
+        }
+      },
+      {
+        "name": "Dusseldorf",
+        "location": {
+          "latitude": 51.225402,
+          "longitude": 6.776314
+        }
+      }
+    ],
+    "previewImages": [
+      "https://www.example.net/preview1.jpg",
+      "https://www.example.net/preview2.jpg",
+      "https://www.example.net/preview3.jpg",
+      "https://www.example.net/preview4.jpg",
+      "https://www.example.net/preview5.jpg"
+    ],
+    "accommodations": [
+      "House",
+      "Room",
+      "Apartment",
+      "Hotel"
+    ],
+    "amenities": [
+      "Breakfast",
+      "Air conditioning",
+      "Laptop friendly workspace",
+      "Baby seat",
+      "Washer",
+      "Towels",
+      "Fridge"
+    ],
+    "hostNames": [
+      "Max",
+      "Angelina",
+      "Susan",
+      "John",
+      "Alex",
+      "Kate"
+    ],
+    "emails": [
+      "user343@gmail.com",
+      "user421@gmail.com",
+      "user174@gmail.com",
+      "user283@.gmail.com",
+      "user731@gmail.com",
+      "user924@gmail.com"
+    ],
+    "avatars": [
+      "avatar1.png",
+      "avatar2.png",
+      "avatar3.png",
+      "avatar4.png",
+      "avatar5.png"
+    ],
+    "passwords": [
+      "1213456",
+      "2347653",
+      "4569873",
+      "2342342",
+      "4234234",
+      "3242342"
+    ],
+    "userTypes": [
+      "обычный",
+      "pro"
+    ]
+  }
+}

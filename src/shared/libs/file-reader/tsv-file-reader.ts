@@ -1,42 +1,28 @@
-import { readFileSync } from 'node:fs';
+import EventEmitter from 'node:events';
+import { createReadStream } from 'node:fs';
 
 import { FileReader } from './file-reader.interface.js';
-import { Offer } from '../../types/index.js';
-import { CityType } from '../../types/city-type.enum.js';
-import { AccommodationType } from '../../types/accommodation-type.enum.js';
-import { UserType } from '../../types/user-type.enum.js';
-
-import {COMMA, DECIMAL, NEWLINE, TAB} from '../../../const.js';
+import {Offer, User} from '../../types/index.js';
+import { CityName } from '../../types/index.js';
+import { Accommodation } from '../../types/index.js';
+import { UserType } from '../../types/index.js';
 
 
-export class TSVFileReader implements FileReader {
-  private rawData = '';
+const DECIMAL = 10;
+const NEWLINE = '\n';
+const TAB = '\t';
+const SEPARATOR = ';';
+
+
+export class TSVFileReader extends EventEmitter implements FileReader {
+  private CHUNK_SIZE = 16384;
 
   constructor(
     private readonly filename: string
-  ) {}
-
-  public read () {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
+  ) {
+    super();
   }
 
-  public toArray (): Offer[] {
-    this.validateRawData();
-    return this.parseRawDataToOffers();
-  }
-
-  private validateRawData (): void {
-    if (!this.rawData) {
-      throw new Error('File was not read');
-    }
-  }
-
-  private parseRawDataToOffers(): Offer[] {
-    return this.rawData
-      .split(NEWLINE)
-      .filter((row) => row.trim().length)
-      .map((line) => this.parseLineToOffer(line));
-  }
 
   private parseLineToOffer(line: string): Offer {
     const [
@@ -54,11 +40,7 @@ export class TSVFileReader implements FileReader {
       guests,
       price,
       amenities,
-      userName,
-      email,
-      avatar,
-      password,
-      userType,
+      host,
       commentsCount,
       location,
     ] = line.split(TAB);
@@ -67,24 +49,18 @@ export class TSVFileReader implements FileReader {
       title,
       description,
       date: new Date(createdDate),
-      city: CityType[city as 'Paris'| 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf'],
+      city: CityName[city as 'Paris'| 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf'],
       preview,
       images: this.parseToArray(images),
       isPremium: this.parseBoolean(isPremium),
       isFavorite: this.parseBoolean(isFavorite),
       rating: this.parseToNum(rating),
-      accommodation: AccommodationType[accommodation as 'apartment' | 'house' | 'room' | 'hotel'],
+      accommodation: Accommodation[accommodation as 'apartment' | 'house' | 'room' | 'hotel'],
       rooms: this.parseToNum(rooms),
       guests: this.parseToNum(guests),
       price: this.parseToNum(price),
       amenities: this.parseToArray(amenities),
-      host: {
-        email,
-        name: userName,
-        avatar,
-        password,
-        type: this.parseUserType(userType),
-      },
+      host: this.parseHost(host),
       commentsCount: this.parseToNum(commentsCount),
       location: {
         latitude: Number(this.parseToArray(location)[0]),
@@ -102,10 +78,43 @@ export class TSVFileReader implements FileReader {
   }
 
   private parseToArray<T> (string: string): T[] {
-    return string.split(COMMA).map((name) => name as T);
+    return string.split(SEPARATOR).map((name) => name as T);
+  }
+
+  private parseHost(string: string): User {
+    const [name, email, avatar, password, userType] = this.parseToArray<string>(string);
+    const type = this.parseUserType(userType);
+    return {name, email, avatar, password, type};
   }
 
   private parseToNum (dataString: string): number {
     return Number.parseInt(dataString, DECIMAL);
   }
+
+  public async read(): Promise<void> {
+    const readStream = createReadStream(this.filename, {
+      highWaterMark: this.CHUNK_SIZE,
+      encoding: 'utf-8',
+    });
+
+    let remainingData = '';
+    let nextLinePosition = -1;
+    let importedRowCount = 0;
+
+    for await (const chunk of readStream) {
+      remainingData += chunk.toString();
+
+      while ((nextLinePosition = remainingData.indexOf(NEWLINE)) >= 0) {
+        const completeRow = remainingData.slice(0, nextLinePosition + 1);
+        remainingData = remainingData.slice(++nextLinePosition);
+        importedRowCount++;
+
+        const parsedOffer = this.parseLineToOffer(completeRow);
+        this.emit('line', parsedOffer);
+      }
+    }
+
+    this.emit('end', importedRowCount);
+  }
+
 }
