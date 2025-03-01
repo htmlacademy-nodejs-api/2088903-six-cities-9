@@ -1,42 +1,24 @@
-import { readFileSync } from 'node:fs';
+import EventEmitter from 'node:events';
+import { createReadStream } from 'node:fs';
 
 import { FileReader } from './file-reader.interface.js';
 import { Offer } from '../../types/index.js';
-import { CityType } from '../../types/city-type.enum.js';
-import { AccommodationType } from '../../types/accommodation-type.enum.js';
-import { UserType } from '../../types/user-type.enum.js';
+import { CityName } from '../../types/index.js';
+import { Accommodation } from '../../types/index.js';
+import { UserType } from '../../types/index.js';
 
 import {COMMA, DECIMAL, NEWLINE, TAB} from '../../../const.js';
 
 
-export class TSVFileReader implements FileReader {
-  private rawData = '';
+export class TSVFileReader extends EventEmitter implements FileReader {
+  private CHUNK_SIZE = 16384;
 
   constructor(
     private readonly filename: string
-  ) {}
-
-  public read () {
-    this.rawData = readFileSync(this.filename, { encoding: 'utf-8' });
+  ) {
+    super();
   }
 
-  public toArray (): Offer[] {
-    this.validateRawData();
-    return this.parseRawDataToOffers();
-  }
-
-  private validateRawData (): void {
-    if (!this.rawData) {
-      throw new Error('File was not read');
-    }
-  }
-
-  private parseRawDataToOffers(): Offer[] {
-    return this.rawData
-      .split(NEWLINE)
-      .filter((row) => row.trim().length)
-      .map((line) => this.parseLineToOffer(line));
-  }
 
   private parseLineToOffer(line: string): Offer {
     const [
@@ -67,13 +49,13 @@ export class TSVFileReader implements FileReader {
       title,
       description,
       date: new Date(createdDate),
-      city: CityType[city as 'Paris'| 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf'],
+      city: CityName[city as 'Paris'| 'Cologne' | 'Brussels' | 'Amsterdam' | 'Hamburg' | 'Dusseldorf'],
       preview,
       images: this.parseToArray(images),
       isPremium: this.parseBoolean(isPremium),
       isFavorite: this.parseBoolean(isFavorite),
       rating: this.parseToNum(rating),
-      accommodation: AccommodationType[accommodation as 'apartment' | 'house' | 'room' | 'hotel'],
+      accommodation: Accommodation[accommodation as 'apartment' | 'house' | 'room' | 'hotel'],
       rooms: this.parseToNum(rooms),
       guests: this.parseToNum(guests),
       price: this.parseToNum(price),
@@ -108,4 +90,31 @@ export class TSVFileReader implements FileReader {
   private parseToNum (dataString: string): number {
     return Number.parseInt(dataString, DECIMAL);
   }
+
+  public async read(): Promise<void> {
+    const readStream = createReadStream(this.filename, {
+      highWaterMark: this.CHUNK_SIZE,
+      encoding: 'utf-8',
+    });
+
+    let remainingData = '';
+    let nextLinePosition = -1;
+    let importedRowCount = 0;
+
+    for await (const chunk of readStream) {
+      remainingData += chunk.toString();
+
+      while ((nextLinePosition = remainingData.indexOf(NEWLINE)) >= 0) {
+        const completeRow = remainingData.slice(0, nextLinePosition + 1);
+        remainingData = remainingData.slice(++nextLinePosition);
+        importedRowCount++;
+
+        const parsedOffer = this.parseLineToOffer(completeRow);
+        this.emit('line', parsedOffer);
+      }
+    }
+
+    this.emit('end', importedRowCount);
+  }
+
 }
