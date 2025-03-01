@@ -32,8 +32,7 @@ export class GenerateCommand implements Command {
   public async execute(...parameters: string[]): Promise<void> {
     const [count, filepath, url] = parameters;
     if (!count || !filepath || !url) {
-      console.error('Missing parameters');
-      return;
+      throw new Error('Missing parameters');
     }
 
     const offerCount = Number.parseInt(count, 10);

@@ -2,12 +2,16 @@ import EventEmitter from 'node:events';
 import { createReadStream } from 'node:fs';
 
 import { FileReader } from './file-reader.interface.js';
-import { Offer } from '../../types/index.js';
+import {Offer, User} from '../../types/index.js';
 import { CityName } from '../../types/index.js';
 import { Accommodation } from '../../types/index.js';
 import { UserType } from '../../types/index.js';
 
-import {COMMA, DECIMAL, NEWLINE, TAB} from '../../../const.js';
+
+const DECIMAL = 10;
+const NEWLINE = '\n';
+const TAB = '\t';
+const SEPARATOR = ';';
 
 
 export class TSVFileReader extends EventEmitter implements FileReader {
@@ -36,11 +40,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       guests,
       price,
       amenities,
-      userName,
-      email,
-      avatar,
-      password,
-      userType,
+      host,
       commentsCount,
       location,
     ] = line.split(TAB);
@@ -60,13 +60,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
       guests: this.parseToNum(guests),
       price: this.parseToNum(price),
       amenities: this.parseToArray(amenities),
-      host: {
-        email,
-        name: userName,
-        avatar,
-        password,
-        type: this.parseUserType(userType),
-      },
+      host: this.parseHost(host),
       commentsCount: this.parseToNum(commentsCount),
       location: {
         latitude: Number(this.parseToArray(location)[0]),
@@ -84,7 +78,13 @@ export class TSVFileReader extends EventEmitter implements FileReader {
   }
 
   private parseToArray<T> (string: string): T[] {
-    return string.split(COMMA).map((name) => name as T);
+    return string.split(SEPARATOR).map((name) => name as T);
+  }
+
+  private parseHost(string: string): User {
+    const [name, email, avatar, password, userType] = this.parseToArray<string>(string);
+    const type = this.parseUserType(userType);
+    return {name, email, avatar, password, type};
   }
 
   private parseToNum (dataString: string): number {

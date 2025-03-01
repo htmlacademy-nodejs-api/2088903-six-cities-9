@@ -52,16 +52,17 @@ export class TSVOfferGenerator implements OfferGenerator {
     const price = generateRandomValue(Price.MIN, Price.MAX).toString();
     const amenities = getRandomItems<string>(this.mockData.amenities).join(';');
     const comments = generateRandomValue(Comments.MIN, Comments.MAX);
-    const hostNames = getRandomItem(this.mockData.hostNames);
+    const hostName = getRandomItem(this.mockData.hostNames);
     const email = getRandomItem(this.mockData.emails);
     const avatar = getRandomItem(this.mockData.avatars);
+    const password = getRandomItem(this.mockData.passwords);
     const userType = getRandomItem(this.mockData.userTypes);
 
     const date = dayjs()
       .subtract(generateRandomValue(Weekday.FIRST, Weekday.LAST), 'day')
       .toISOString();
 
-    const host = [hostNames, email, avatar, userType].join(';');
+    const host = [hostName, email, avatar, password, userType].join(';');
     const location = [city.location.latitude, city.location.longitude].join(';');
 
     return [

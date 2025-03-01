@@ -27,7 +27,7 @@ export class ImportCommand implements Command {
     fileReader.on('end', this.onCompleteImport);
 
     try {
-      fileReader.read();
+      await fileReader.read();
     } catch (error) {
       console.error(`Can't import data from file: ${filename}`);
       console.error(getErrorMessage(error));
