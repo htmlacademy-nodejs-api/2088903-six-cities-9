@@ -3,15 +3,16 @@ import { inject, injectable } from 'inversify';
 
 import { Config } from './config.interface.js';
 import { Logger } from '../logger/index.js';
-import { configRestSchema, RestSchema } from './rest.schema.js';
-import { Component } from '../../types/index.js';
+import { configRestSchema } from './rest.schema.js';
+import { COMPONENT_MAP } from '../../types/index.js';
+import {RestSchema} from './rest.schema.type.js';
 
 @injectable()
 export class RestConfig implements Config<RestSchema> {
   private readonly config: RestSchema;
 
   constructor(
-    @inject(Component.Logger) private readonly logger: Logger
+    @inject(COMPONENT_MAP.LOGGER) private readonly logger: Logger
   ) {
     const parsedOutput = config();
 
