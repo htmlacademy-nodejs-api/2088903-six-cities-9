@@ -8,3 +8,4 @@ export { MockServerData } from './mock-server-data.type.js';
 export { Accommodation } from './accommodation.enum.js';
 export { Amenities } from './amenities.enum.js';
 export { UserType } from './user-type.enum.js';
+export { Component } from './component.enum.js';
