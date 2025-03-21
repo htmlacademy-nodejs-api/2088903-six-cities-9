@@ -68,10 +68,10 @@
       "https://www.example.net/preview5.jpg"
     ],
     "accommodations": [
-      "House",
-      "Room",
-      "Apartment",
-      "Hotel"
+      "house",
+      "room",
+      "apartment",
+      "hotel"
     ],
     "amenities": [
       "Breakfast",

@@ -9,8 +9,7 @@ import {Logger} from '../../shared/libs/logger/index.js';
 import {ConsoleLogger} from '../../shared/libs/logger/console.logger.js';
 import {DefaultUserService, UserModel} from '../../shared/modules/user/index.js';
 
-export const DEFAULT_DB_PORT = '27017';
-export const DEFAULT_USER_PASSWORD = '123456';
+const DEFAULT_USER_PASSWORD = '123456';
 
 export class ImportCommand implements Command {
   private readonly userService: UserService;
