@@ -30,17 +30,14 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({ required: true, default: UserType.Regular })
   public type: UserType;
 
-  constructor(userData: User) {
+  constructor(userData: User, salt: string) {
     super();
 
     this.name = userData.name;
     this.email = userData.email;
     this.avatar = userData.avatar;
     this.type = userData.type;
-  }
-
-  public setPassword(password: string, salt: string) {
-    this.password = createSHA256(password, salt);
+    this.password = createSHA256(userData.password, salt);
   }
 
   public getPassword() {
