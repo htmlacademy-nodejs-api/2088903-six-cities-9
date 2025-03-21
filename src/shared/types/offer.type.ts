@@ -12,7 +12,6 @@ export type Offer = {
   preview: string;
   images: string[];
   isPremium: boolean;
-  isFavorite: boolean;
   rating: number;
   accommodation: Accommodation,
   rooms: number;
