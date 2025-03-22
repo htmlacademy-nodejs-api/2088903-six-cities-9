@@ -60,7 +60,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ type: () => String, enum: Amenities, required: true })
   public amenities!: Amenities[];
 
-  @prop({ ref: UserEntity, required: true })
+  @prop({ ref: () => UserEntity, required: true })
   public userId!: Ref<UserEntity>;
 
   @prop({ default: 0 })
