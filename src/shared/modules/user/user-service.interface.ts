@@ -13,4 +13,6 @@ export interface UserService {
   findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>>;
   updateById(userId: string, dto: UpdateUserDto): Promise<Nullable<DocumentType<UserEntity>>>;
   findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]>;
+  addFavorite(userId: string, offerId: string): Promise<Nullable<DocumentType<UserEntity>>>;
+  removeFavorite(userId: string, offerId: string): Promise<Nullable<DocumentType<UserEntity>>>;
 }
