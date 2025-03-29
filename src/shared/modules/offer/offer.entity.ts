@@ -3,10 +3,9 @@ import {
   getModelForClass,
   modelOptions,
   prop,
-  Ref
 } from '@typegoose/typegoose';
-import { UserEntity, } from '../user/index.js';
 import { Location, CityName, Accommodation, Amenities } from '../../types/index.js';
+import {UserRef} from '../../types/entity-refs.js';
 
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -60,14 +59,17 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ type: () => String, enum: Amenities, required: true })
   public amenities!: Amenities[];
 
-  @prop({ ref: () => UserEntity, required: true })
-  public userId!: Ref<UserEntity>;
-
   @prop({ default: 0 })
   public commentsCount!: number;
 
   @prop({ required: true })
   public location!: Location;
+
+  @prop({ ref: 'UserEntity', required: true })
+  public userId!: UserRef;
+
+  @prop({ default: 0 })
+  public totalRating!: number;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

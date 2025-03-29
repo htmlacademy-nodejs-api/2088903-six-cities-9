@@ -1,7 +1,9 @@
-import { defaultClasses, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
+import {defaultClasses, DocumentType, getModelForClass, modelOptions, prop} from '@typegoose/typegoose';
 
 import { User, UserType } from '../../types/index.js';
 import { createSHA256 } from '../../helpers/index.js';
+import {OfferRef} from '../../types/entity-refs.js';
+import {OfferEntity} from '../offer/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface UserEntity extends defaultClasses.Base {}
@@ -29,6 +31,21 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
 
   @prop({ required: true, default: UserType.Regular })
   public type: UserType;
+
+  @prop({
+    ref: 'OfferEntity',
+    required: true,
+    default: [],
+  })
+  public favorites: OfferRef[];
+
+  @prop({
+    ref: 'OfferEntity',
+    foreignField: '_id',
+    localField: 'favorites',
+    justOne: false,
+  })
+  public favoriteOffers?: DocumentType<OfferEntity>[];
 
   constructor(userData: User, salt: string) {
     super();
