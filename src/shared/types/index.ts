@@ -9,3 +9,5 @@ export { Accommodation } from './accommodation.enum.js';
 export { Amenities } from './amenities.enum.js';
 export { UserType } from './user-type.enum.js';
 export { COMPONENT_MAP } from './component-map.constant.js';
+export { SortType } from './sort-type.enum.js';
+export { Nullable } from './nullable.type.js';
