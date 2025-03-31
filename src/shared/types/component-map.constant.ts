@@ -9,4 +9,6 @@ export const COMPONENT_MAP = {
   OFFER_MODEL: Symbol('OfferModel'),
   COMMENT_SERVICE: Symbol('CommentService'),
   COMMENT_MODEL: Symbol('CommentModel'),
+  EXCEPTION_FILTER: Symbol.for('ExceptionFilter'),
+  USER_CONTROLLER: Symbol.for('UserController'),
 } as const;
