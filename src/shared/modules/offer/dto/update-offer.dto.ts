@@ -3,7 +3,6 @@ import { Accommodation, Amenities, CityName, Location } from '../../../types/ind
 export class UpdateOfferDto {
   public title?: string;
   public description?: string;
-  public date?: Date;
   public city?: CityName;
   public preview?: string;
   public images?: string[];

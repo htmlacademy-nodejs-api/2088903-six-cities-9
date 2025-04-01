@@ -19,6 +19,7 @@ export class RestApplication {
     @inject(COMPONENT_MAP.DATABASE_CLIENT) private readonly databaseClient: DatabaseClient,
     @inject(COMPONENT_MAP.EXCEPTION_FILTER) private readonly appExceptionFilter: ExceptionFilter,
     @inject(COMPONENT_MAP.USER_CONTROLLER) private readonly userController: Controller,
+    @inject(COMPONENT_MAP.OFFER_CONTROLLER) private readonly offerController: Controller,
   ) {
     this.server = express();
   }
@@ -41,8 +42,8 @@ export class RestApplication {
   }
 
   private async _initControllers() {
-    // this.server.use('/categories', this.categoryController.router);
     this.server.use('/users', this.userController.router);
+    this.server.use('/offers', this.offerController.router);
   }
 
   private async _initMiddleware() {

@@ -1,11 +1,11 @@
+import { Types } from 'mongoose';
 import { DocumentType, types } from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
-import { Types } from 'mongoose';
 
 import { UserService } from './user-service.interface.js';
 import { UserEntity } from './user.entity.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
-import {COMPONENT_MAP, Nullable} from '../../types/index.js';
+import { COMPONENT_MAP, Nullable } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
 import { OfferEntity } from '../offer/index.js';
@@ -15,7 +15,7 @@ import { OfferEntity } from '../offer/index.js';
 export class DefaultUserService implements UserService {
   constructor(
     @inject(COMPONENT_MAP.LOGGER) private readonly logger: Logger,
-    @inject(COMPONENT_MAP.USER_SERVICE) private readonly userModel: types.ModelType<UserEntity>
+    @inject(COMPONENT_MAP.USER_MODEL) private readonly userModel: types.ModelType<UserEntity>
   ) {}
 
   public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {

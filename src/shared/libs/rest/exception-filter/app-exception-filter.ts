@@ -6,7 +6,8 @@ import { ExceptionFilter } from './exception-filter.interface.js';
 import { Logger } from '../../logger/index.js';
 import { COMPONENT_MAP } from '../../../types/index.js';
 import { HttpError } from '../errors/index.js';
-import { createErrorObject } from '../../../helpers/common.js';
+import { createErrorObject } from '../../../helpers/index.js';
+
 
 @injectable()
 export class AppExceptionFilter implements ExceptionFilter {
