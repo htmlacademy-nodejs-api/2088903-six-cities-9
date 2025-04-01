@@ -1,0 +1,33 @@
+# Предложения
+## Получить список предложений
+GET http://localhost:5000/offers HTTP/1.1
+Content-Type: application/json
+
+###
+
+## Добавить новое предложение
+POST http://localhost:5000/offers HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Домик у пруда — волшебное место",
+  "description": "В квартире есть просторная гостиная с кухней, одна спальня и ванная комната с ванной.",
+  "city": "Paris",
+  "preview": "preview.jpg",
+  "images": ["image-1.jpg", "image-2.jpg", "image-3.jpg"],
+  "isPremium": true,
+  "rating": 5,
+  "accommodation": "house",
+  "rooms": 2,
+  "guests": 6,
+  "price": 1560,
+  "amenities": ["Breakfast", "Air conditioning", "Fridge"],
+  "userId": "67ebac2fb61d3dc137956cab",
+  "commentCount": 0,
+  "location": {
+    "latitude": 48.85661,
+    "longitude": 2.351499
+  }
+}
+
+###
