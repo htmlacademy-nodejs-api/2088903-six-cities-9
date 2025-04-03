@@ -7,8 +7,8 @@ import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { OFFER_LIMITS } from './offer.constant.js';
-import {calculateOfferLimits} from '../../helpers/calculate-offer-limits.js';
+import { OFFER_LIMIT } from './offer-limit.constant.js';
+import { calculateOfferLimits } from '../../helpers/index.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -46,7 +46,7 @@ export class DefaultOfferService implements OfferService {
     return this.offerModel
       .find({ city, isPremium: true })
       .sort({ createdAt: SortType.Down })
-      .limit(OFFER_LIMITS.PREMIUM)
+      .limit(OFFER_LIMIT.COUNT.PREMIUM)
       .populate(['userId'])
       .exec();
   }

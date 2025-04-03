@@ -1,9 +1,9 @@
-import { OFFER_LIMITS } from '../modules/offer/index.js';
+import { OFFER_LIMIT } from '../modules/offer/index.js';
 
 export const calculateOfferLimits = (requestedCount?: number): number => {
   if (!requestedCount) {
-    return OFFER_LIMITS.DEFAULT;
+    return OFFER_LIMIT.COUNT.DEFAULT;
   }
 
-  return Math.min(requestedCount, OFFER_LIMITS.MAX);
+  return Math.min(requestedCount, OFFER_LIMIT.COUNT.MAX);
 };

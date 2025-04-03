@@ -8,7 +8,7 @@ Content-Type: application/json
   "name": "Ivan",
   "email": "ivan@mail.ru",
   "password": "shining",
-  "avatar": "face.png",
+  "avatar": "https://domainname.com/face.png",
   "type": "pro"
 }
 
