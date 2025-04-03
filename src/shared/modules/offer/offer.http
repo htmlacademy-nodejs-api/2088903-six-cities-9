@@ -31,3 +31,8 @@ Content-Type: application/json
 }
 
 ###
+
+# Получить объявление по идентификатору
+GET http://localhost:5000/offers/67ebb90be6cfda691677b18e HTTP/1.1
+
+###
