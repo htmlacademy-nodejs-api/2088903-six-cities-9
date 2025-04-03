@@ -11,3 +11,4 @@ export { UserType } from './user-type.enum.js';
 export { COMPONENT_MAP } from './component-map.constant.js';
 export { SortType } from './sort-type.enum.js';
 export { Nullable } from './nullable.type.js';
+export { DocumentExists } from './document-exists.interface.js';

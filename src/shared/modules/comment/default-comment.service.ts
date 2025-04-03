@@ -8,7 +8,7 @@ import { OfferService } from '../offer/index.js';
 import { Logger } from '../../libs/logger/index.js';
 
 import { COMPONENT_MAP, SortType } from '../../types/index.js';
-import { MAX_COMMENT_COUNT } from './comment.constant.js';
+import { COMMENT_LIMIT } from './comment-limit.constant.js';
 
 
 @injectable()
@@ -35,7 +35,7 @@ export class DefaultCommentService implements CommentService {
     return this.commentModel
       .find({ offerId })
       .sort({ createdAt: SortType.Down })
-      .limit(MAX_COMMENT_COUNT)
+      .limit(COMMENT_LIMIT.MAX_COMMENT_COUNT)
       .populate('userId');
   }
 
