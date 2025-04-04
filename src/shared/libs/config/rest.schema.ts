@@ -53,4 +53,22 @@ export const configRestSchema = convict<RestSchema>({
     env: 'UPLOAD_DIRECTORY',
     default: null
   },
+  JWT_SECRET: {
+    doc: 'JWT secret',
+    format: String,
+    env: 'JWT_SECRET',
+    default: null
+  },
+  JWT_ALGORITHM: {
+    doc: 'JWT algorithm',
+    format: String,
+    env: 'JWT_ALGORITHM',
+    default: null
+  },
+  JWT_EXPIRED: {
+    doc: 'JWT token expiration time',
+    format: String,
+    env: 'JWT_EXPIRED',
+    default: null
+  }
 });

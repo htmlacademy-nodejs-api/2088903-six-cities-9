@@ -92,8 +92,8 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(OfferRDO, offers));
   }
 
-  public async create({ body }: CreateOfferRequest, res: Response): Promise<void> {
-    const result = await this.offerService.create(body);
+  public async create({ body, tokenPayload }: CreateOfferRequest, res: Response): Promise<void> {
+    const result = await this.offerService.create({ ...body, userId: tokenPayload.id });
     this.created(res, fillDTO(OfferRDO, result));
   }
 

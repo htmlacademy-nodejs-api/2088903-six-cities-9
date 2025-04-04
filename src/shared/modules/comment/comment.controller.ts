@@ -4,7 +4,7 @@ import { Response } from 'express';
 import {
   BaseController,
   DocumentExistsMiddleware,
-  HttpMethod,
+  HttpMethod, PrivateRouteMiddleware,
   ValidateDTOMiddleware
 } from '../../libs/rest/index.js';
 import { COMPONENT_MAP } from '../../types/index.js';
@@ -32,6 +32,7 @@ export default class CommentController extends BaseController {
       method: HttpMethod.Post,
       handler: this.create,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateDTOMiddleware(CreateCommentDTO),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
       ]
@@ -39,10 +40,10 @@ export default class CommentController extends BaseController {
   }
 
   public async create(
-    { body }: CreateCommentRequest,
+    { body, tokenPayload }: CreateCommentRequest,
     res: Response
   ): Promise<void> {
-    const comment = await this.commentService.create(body);
+    const comment = await this.commentService.create({ ...body, userId: tokenPayload.id });
     await this.offerService.incCommentCount(body.offerId);
     this.created(res, fillDTO(CommentRDO, comment));
   }

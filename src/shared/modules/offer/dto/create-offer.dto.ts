@@ -5,7 +5,7 @@ import {
   ArrayMinSize, ArrayUnique,
   IsArray,
   IsBoolean,
-  IsEnum, IsInt, IsMongoId, IsObject,
+  IsEnum, IsInt, IsObject,
   IsOptional,
   IsUrl, Max,
   MaxLength, Min,
@@ -65,7 +65,6 @@ export class CreateOfferDTO {
   @ArrayUnique<Amenities>()
   public amenities: Amenities[];
 
-  @IsMongoId({ message: OFFER_VALIDATION_MESSAGE.USER_ID.INVALID_ID })
   public userId: string;
 
   @IsOptional()
