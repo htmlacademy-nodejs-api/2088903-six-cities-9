@@ -22,8 +22,8 @@ export function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : '';
 }
 
-export function fillDTO<T, V>(someDto: ClassConstructor<T>, plainObject: V) {
-  return plainToInstance(someDto, plainObject, { excludeExtraneousValues: true });
+export function fillDTO<T, V>(someDTO: ClassConstructor<T>, plainObject: V) {
+  return plainToInstance(someDTO, plainObject, { excludeExtraneousValues: true });
 }
 
 export function createErrorObject(message: string) {

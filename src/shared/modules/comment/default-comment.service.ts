@@ -3,12 +3,12 @@ import { DocumentType, types } from '@typegoose/typegoose';
 
 import { CommentService } from './comment-service.interface.js';
 import { CommentEntity } from './comment.entity.js';
-import { CreateCommentDto } from './dto/create-comment.dto.js';
+import { CreateCommentDTO } from './dto/create-comment.dto.js';
 import { OfferService } from '../offer/index.js';
 import { Logger } from '../../libs/logger/index.js';
 
 import { COMPONENT_MAP, SortType } from '../../types/index.js';
-import { MAX_COMMENT_COUNT } from './comment.constant.js';
+import { COMMENT_LIMIT } from './comment-limit.constant.js';
 
 
 @injectable()
@@ -19,7 +19,7 @@ export class DefaultCommentService implements CommentService {
     @inject(COMPONENT_MAP.LOGGER) private readonly logger: Logger,
   ) {}
 
-  public async create (dto: CreateCommentDto): Promise<DocumentType<CommentEntity>> {
+  public async create (dto: CreateCommentDTO): Promise<DocumentType<CommentEntity>> {
     const comment = await this.commentModel.create(dto);
     this.logger.info(`New comment created: ${comment._id}`);
 
@@ -35,7 +35,7 @@ export class DefaultCommentService implements CommentService {
     return this.commentModel
       .find({ offerId })
       .sort({ createdAt: SortType.Down })
-      .limit(MAX_COMMENT_COUNT)
+      .limit(COMMENT_LIMIT.MAX_COMMENT_COUNT)
       .populate('userId');
   }
 

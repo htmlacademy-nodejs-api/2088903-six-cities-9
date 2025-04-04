@@ -20,6 +20,7 @@ export class RestApplication {
     @inject(COMPONENT_MAP.EXCEPTION_FILTER) private readonly appExceptionFilter: ExceptionFilter,
     @inject(COMPONENT_MAP.USER_CONTROLLER) private readonly userController: Controller,
     @inject(COMPONENT_MAP.OFFER_CONTROLLER) private readonly offerController: Controller,
+    @inject(COMPONENT_MAP.COMMENT_CONTROLLER) private readonly commentController: Controller,
   ) {
     this.server = express();
   }
@@ -44,10 +45,15 @@ export class RestApplication {
   private async _initControllers() {
     this.server.use('/users', this.userController.router);
     this.server.use('/offers', this.offerController.router);
+    this.server.use('/comments', this.commentController.router);
   }
 
   private async _initMiddleware() {
     this.server.use(express.json());
+    this.server.use(
+      '/upload',
+      express.static(this.config.get('UPLOAD_DIRECTORY'))
+    );
   }
 
   private async _initExceptionFilters() {

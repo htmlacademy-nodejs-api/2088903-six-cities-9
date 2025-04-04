@@ -77,7 +77,7 @@ paths:
         required: true
 
       responses:
-        '201':
+        '200':
           description: Пользователь авторизован. Объект пользователя с токеном.
           content:
             application/json:
@@ -85,8 +85,6 @@ paths:
                 $ref: '#/components/schemas/token'
         '401':
           description: Неправильный логин или пароль.
-        '403':
-          description: Несуществующий логин.
 
   /users/favorites:
     get:
@@ -104,7 +102,7 @@ paths:
                 type: array
                 $ref: '#/components/schemas/offer'
         '403':
-          description: Ошибка авторизации пользователя.
+          description: Доступ к списке избранных предложений запрещен.
 
   /users/favorites/{offerID}:
     parameters:

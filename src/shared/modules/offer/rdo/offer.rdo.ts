@@ -1,59 +1,60 @@
-import { Expose } from 'class-transformer';
-import { Accommodation, Amenities, CityName, Location } from '../../../types/index.js';
+import { Expose, Type } from 'class-transformer';
+import { Accommodation, Amenities, CityName } from '../../../types/index.js';
+import { UserRDO } from '../../user/index.js';
+import { LocationRDO } from './location.rdo.js';
 
 
-export class OfferRdo {
+export class OfferRDO {
   @Expose()
-  public id: string;
+  public title!: string;
 
   @Expose()
-  public title: string;
-
-  @Expose()
-  public description: string;
+  public description!: string;
 
   @Expose({ name: 'createdAt' })
-  public date: Date;
+  public date!: Date;
 
   @Expose()
-  public city: CityName;
+  public city!: CityName;
 
   @Expose()
-  public preview: string;
+  public preview!: string;
 
   @Expose()
-  public images: string[];
+  public images!: string[];
 
   @Expose()
-  public isPremium: boolean;
+  public isPremium!: boolean;
 
   @Expose()
-  public isFavorite: boolean;
+  public isFavorite!: boolean;
 
   @Expose()
-  public rating: number;
+  public rating!: number;
 
   @Expose()
-  public accommodation: Accommodation;
+  public accommodation!: Accommodation;
 
   @Expose()
-  public rooms: number;
+  public rooms!: number;
 
   @Expose()
-  public guests: number;
+  public guests!: number;
 
   @Expose()
-  public price: number;
+  public price!: number;
 
   @Expose()
-  public amenities: Amenities[];
+  public amenities!: Amenities[];
 
   @Expose()
-  public userId: string;
+  @Type(() => UserRDO)
+  public userId!: UserRDO;
 
   @Expose()
-  public commentCount: number;
+  public commentCount!: number;
 
   @Expose()
-  public location: Location;
+  @Type(() => LocationRDO)
+  public location!: LocationRDO;
 }
