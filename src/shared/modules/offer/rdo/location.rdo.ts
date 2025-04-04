@@ -1,6 +1,6 @@
 import { Expose } from 'class-transformer';
 
-export class LocationRdo {
+export class LocationRDO {
   @Expose()
     latitude: number;
 

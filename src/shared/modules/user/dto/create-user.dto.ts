@@ -3,7 +3,7 @@ import { USER_VALIDATION_MESSAGE } from './user-validation.messages.js';
 import {IsEmail, IsEnum, IsOptional, IsUrl, MaxLength, MinLength} from 'class-validator';
 import { USER } from '../user.constant.js';
 
-export class CreateUserDto {
+export class CreateUserDTO {
   @MinLength(USER.NAME.MIN_LENGTH, { message: USER_VALIDATION_MESSAGE.NAME.MAX_LENGTH })
   @MaxLength(USER.NAME.MAX_LENGTH, { message: USER_VALIDATION_MESSAGE.NAME.MAX_LENGTH })
   public name: string;

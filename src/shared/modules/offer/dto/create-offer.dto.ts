@@ -13,9 +13,9 @@ import {
 } from 'class-validator';
 import { OFFER_VALIDATION_MESSAGE } from './offer-validation.messages.js';
 import { Type } from 'class-transformer';
-import { LocationDto } from './location.dto.js';
+import { LocationDTO } from './location.dto.js';
 
-export class CreateOfferDto {
+export class CreateOfferDTO {
   @MinLength(OFFER_LIMIT.TITLE.MIN_LENGTH, { message: OFFER_VALIDATION_MESSAGE.TITLE.MIN_LENGTH })
   @MaxLength(OFFER_LIMIT.TITLE.MAX_LENGTH, { message: OFFER_VALIDATION_MESSAGE.TITLE.MAX_LENGTH })
   public title: string;
@@ -73,6 +73,6 @@ export class CreateOfferDto {
 
   @ValidateNested()
   @IsObject({ message: OFFER_VALIDATION_MESSAGE.LOCATION.INVALID_FORMAT })
-  @Type(() => LocationDto)
-  public location!: LocationDto;
+  @Type(() => LocationDTO)
+  public location!: LocationDTO;
 }

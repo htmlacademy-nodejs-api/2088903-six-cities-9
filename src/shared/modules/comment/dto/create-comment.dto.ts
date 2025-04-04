@@ -2,7 +2,7 @@ import { COMMENT_LIMIT } from '../comment-limit.constant.js';
 import { IsInt, IsMongoId, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { COMMENT_VALIDATION_MESSAGES } from './comment-validation.messages.js';
 
-export class CreateCommentDto {
+export class CreateCommentDTO {
   @MinLength(COMMENT_LIMIT.TEXT.MIN_LENGTH, { message: COMMENT_VALIDATION_MESSAGES.TEXT.MIN_LENGTH })
   @MaxLength(COMMENT_LIMIT.TEXT.MAX_LENGTH, { message: COMMENT_VALIDATION_MESSAGES.TEXT.MAX_LENGTH })
   public comment: string;

@@ -2,7 +2,7 @@ import { USER_VALIDATION_MESSAGE } from './user-validation.messages.js';
 import { IsEmail, MaxLength, MinLength } from 'class-validator';
 import { USER } from '../user.constant.js';
 
-export class LoginUserDto {
+export class LoginUserDTO {
   @IsEmail({}, { message: USER_VALIDATION_MESSAGE.EMAIL.INVALID_FORMAT })
   public email: string;
 

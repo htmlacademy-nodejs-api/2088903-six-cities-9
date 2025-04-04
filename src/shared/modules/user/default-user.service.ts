@@ -4,10 +4,10 @@ import { inject, injectable } from 'inversify';
 
 import { UserService } from './user-service.interface.js';
 import { UserEntity } from './user.entity.js';
-import { CreateUserDto } from './dto/create-user.dto.js';
+import { CreateUserDTO } from './dto/create-user.dto.js';
 import { COMPONENT_MAP, Nullable } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
-import { UpdateUserDto } from './dto/update-user.dto.js';
+import { UpdateUserDTO } from './dto/update-user.dto.js';
 import { OfferEntity } from '../offer/index.js';
 
 
@@ -18,7 +18,7 @@ export class DefaultUserService implements UserService {
     @inject(COMPONENT_MAP.USER_MODEL) private readonly userModel: types.ModelType<UserEntity>
   ) {}
 
-  public async create(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
+  public async create(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
     const user = new UserEntity(dto, salt);
 
     const result = await this.userModel.create(user);
@@ -35,7 +35,7 @@ export class DefaultUserService implements UserService {
     return this.userModel.findById(userId);
   }
 
-  public async findOrCreate(dto: CreateUserDto, salt: string): Promise<DocumentType<UserEntity>> {
+  public async findOrCreate(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
     const existedUser = await this.findByEmail(dto.email);
 
     if (existedUser) {
@@ -45,7 +45,7 @@ export class DefaultUserService implements UserService {
     return this.create(dto, salt);
   }
 
-  public async updateById (userId: string, dto: UpdateUserDto): Promise<Nullable<DocumentType<UserEntity>>> {
+  public async updateById (userId: string, dto: UpdateUserDTO): Promise<Nullable<DocumentType<UserEntity>>> {
     return this.userModel
       .findByIdAndUpdate(userId, dto, { new: true })
       .exec();

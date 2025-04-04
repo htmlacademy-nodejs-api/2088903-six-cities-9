@@ -5,8 +5,8 @@ import { OfferService } from './offer-service.interface.js';
 import { CityName, COMPONENT_MAP, Nullable, SortType } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { OfferEntity } from './offer.entity.js';
-import { CreateOfferDto } from './dto/create-offer.dto.js';
-import { UpdateOfferDto } from './dto/update-offer.dto.js';
+import { CreateOfferDTO } from './dto/create-offer.dto.js';
+import { UpdateOfferDTO } from './dto/update-offer.dto.js';
 import { OFFER_LIMIT } from './offer-limit.constant.js';
 import { calculateOfferLimits } from '../../helpers/index.js';
 
@@ -17,7 +17,7 @@ export class DefaultOfferService implements OfferService {
     @inject(COMPONENT_MAP.OFFER_MODEL) private readonly offerModel: types.ModelType<OfferEntity>
   ) {}
 
-  public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
+  public async create(dto: CreateOfferDTO): Promise<DocumentType<OfferEntity>> {
     const result = await this.offerModel.create(dto);
     this.logger.info(`New offer created: ${dto.title}`);
 
@@ -57,7 +57,7 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async updateById (offerId: string, dto: UpdateOfferDto): Promise<Nullable<DocumentType<OfferEntity>>> {
+  public async updateById (offerId: string, dto: UpdateOfferDTO): Promise<Nullable<DocumentType<OfferEntity>>> {
     return this.offerModel
       .findByIdAndUpdate(offerId, dto, {new: true})
       .populate(['userId'])

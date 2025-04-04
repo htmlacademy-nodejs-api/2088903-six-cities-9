@@ -19,10 +19,10 @@ import {
 
 import { OFFER_VALIDATION_MESSAGE } from './offer-validation.messages.js';
 import { Accommodation, Amenities, CityName } from '../../../types/index.js';
-import { LocationDto } from './location.dto.js';
+import { LocationDTO } from './location.dto.js';
 import { OFFER_LIMIT } from '../offer-limit.constant.js';
 
-export class UpdateOfferDto {
+export class UpdateOfferDTO {
   @IsOptional()
   @MinLength(OFFER_LIMIT.TITLE.MIN_LENGTH, { message: OFFER_VALIDATION_MESSAGE.TITLE.MIN_LENGTH })
   @MaxLength(OFFER_LIMIT.TITLE.MAX_LENGTH, { message: OFFER_VALIDATION_MESSAGE.TITLE.MAX_LENGTH })
@@ -83,6 +83,6 @@ export class UpdateOfferDto {
   @IsOptional()
   @ValidateNested()
   @IsObject({ message: OFFER_VALIDATION_MESSAGE.LOCATION.INVALID_FORMAT })
-  @Type(() => LocationDto)
-  public location?: LocationDto;
+  @Type(() => LocationDTO)
+  public location?: LocationDTO;
 }

@@ -1,6 +1,6 @@
 import { IsLatitude, IsLongitude } from 'class-validator';
 
-export class LocationDto {
+export class LocationDTO {
   @IsLatitude()
   public latitude!: number;
 

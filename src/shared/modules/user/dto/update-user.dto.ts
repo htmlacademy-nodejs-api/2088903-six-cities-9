@@ -1,6 +1,6 @@
 import { UserType } from '../../../types/index.js';
 
-export class UpdateUserDto {
+export class UpdateUserDTO {
   public name?: string;
   public avatar?: string;
   public type?: UserType;
