@@ -10,7 +10,6 @@ export class CreateCommentDTO {
   @IsMongoId({ message: COMMENT_VALIDATION_MESSAGES.OFFER_ID.INVALID_ID })
   public offerId: string;
 
-  @IsMongoId({ message: COMMENT_VALIDATION_MESSAGES.USER_ID.INVALID_ID })
   public userId: string;
 
   @IsInt({ message: COMMENT_VALIDATION_MESSAGES.RATING.INVALID_FORMAT })
