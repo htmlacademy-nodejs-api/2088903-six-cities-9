@@ -9,6 +9,7 @@ import { COMPONENT_MAP, Nullable } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { UpdateUserDTO } from './dto/update-user.dto.js';
 import { OfferEntity } from '../offer/index.js';
+import { USER } from './user.constant.js';
 
 
 @injectable()
@@ -19,7 +20,7 @@ export class DefaultUserService implements UserService {
   ) {}
 
   public async create(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
-    const user = new UserEntity(dto, salt);
+    const user = new UserEntity({ ...dto, avatar: USER.DEFAULT_AVATAR }, salt);
 
     const result = await this.userModel.create(user);
     this.logger.info(`New user created: ${user.email}`);

@@ -1,5 +1,5 @@
 export const USER = {
-  DEFAULT_AVATAR: 'https://domainname.com/default-avatar.jpg',
+  DEFAULT_AVATAR: 'default-avatar.jpg',
   NAME: {
     MIN_LENGTH: 1,
     MAX_LENGTH: 15

@@ -15,4 +15,7 @@ export const COMPONENT_MAP = {
   COMMENT_CONTROLLER: Symbol('CommentController'),
   AUTH_SERVICE: Symbol.for('AuthService'),
   AUTH_EXCEPTION_FILTER: Symbol.for('AuthExceptionFilter'),
+  HTTP_EXCEPTION_FILTER: Symbol.for('HttpExceptionFilter'),
+  VALIDATION_EXCEPTION_FILTER: Symbol.for('ValidationExceptionFilter'),
+  PATH_TRANSFORMER: Symbol.for('PathTransformer'),
 } as const;

@@ -7,3 +7,4 @@ export { UserService } from './user-service.interface.js';
 export { UserController } from './user.controller.js';
 export { UserRDO } from './rdo/user.rdo.js';
 export { LoginUserDTO } from './dto/login-user.dto.js';
+export { USER } from './user.constant.js';
