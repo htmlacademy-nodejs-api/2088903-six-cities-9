@@ -5,7 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 import {
   BaseController, DocumentExistsMiddleware,
   HttpError,
-  HttpMethod,
+  HttpMethod, PrivateRouteMiddleware,
   ValidateDTOMiddleware,
   ValidateObjectIdMiddleware
 } from '../../libs/rest/index.js';
@@ -37,7 +37,10 @@ export class OfferController extends BaseController {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDTOMiddleware(CreateOfferDTO)]
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDTOMiddleware(CreateOfferDTO)
+      ]
     });
     this.addRoute({
       path: '/:offerId',
@@ -53,6 +56,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Delete,
       handler: this.delete,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]
@@ -62,6 +66,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDTOMiddleware(UpdateOfferDTO),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),

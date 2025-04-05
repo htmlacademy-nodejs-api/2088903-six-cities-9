@@ -5,7 +5,7 @@ import {
   BaseController,
   DocumentExistsMiddleware,
   HttpMethod, PrivateRouteMiddleware,
-  ValidateDTOMiddleware
+  ValidateDTOMiddleware,
 } from '../../libs/rest/index.js';
 import { COMPONENT_MAP } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
