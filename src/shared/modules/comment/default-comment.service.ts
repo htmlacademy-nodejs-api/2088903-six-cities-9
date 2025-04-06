@@ -13,8 +13,8 @@ import { COMMENT_LIMIT } from './comment-limit.constant.js';
 @injectable()
 export class DefaultCommentService implements CommentService {
   constructor(
-    @inject(COMPONENT_MAP.COMMENT_MODEL) private readonly commentModel: types.ModelType<CommentEntity>,
     @inject(COMPONENT_MAP.LOGGER) private readonly logger: Logger,
+    @inject(COMPONENT_MAP.COMMENT_MODEL) private readonly commentModel: types.ModelType<CommentEntity>,
   ) {}
 
   public async create (dto: CreateCommentDTO, offerId: string): Promise<DocumentType<CommentEntity>> {

@@ -5,8 +5,8 @@ import { UserService } from './user-service.interface.js';
 import { COMPONENT_MAP } from '../../types/index.js';
 import { DefaultUserService } from './default-user.service.js';
 import { UserEntity, UserModel } from './user.entity.js';
-import {Controller} from '../../libs/rest/index.js';
-import {UserController} from './user.controller.js';
+import { Controller } from '../../libs/rest/index.js';
+import { UserController } from './user.controller.js';
 
 
 export function createUserContainer() {

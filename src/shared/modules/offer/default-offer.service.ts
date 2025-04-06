@@ -1,23 +1,25 @@
-import { inject, injectable } from 'inversify';
-import { DocumentType, types } from '@typegoose/typegoose';
+import {inject, injectable} from 'inversify';
+import {DocumentType, types} from '@typegoose/typegoose';
 
-import { OfferService } from './offer-service.interface.js';
-import { CityName, COMPONENT_MAP, Nullable, SortType } from '../../types/index.js';
-import { Logger } from '../../libs/logger/index.js';
-import { OfferEntity } from './offer.entity.js';
-import { CreateOfferDTO } from './dto/create-offer.dto.js';
-import { UpdateOfferDTO } from './dto/update-offer.dto.js';
-import { OFFER_LIMIT } from './offer-limit.constant.js';
-import { calculateOfferLimits } from '../../helpers/index.js';
-import { Types } from 'mongoose';
-import { USER_LOOKUP_PIPELINE, addFavoriteStatusPipeline } from './index.js';
+import {OfferService} from './offer-service.interface.js';
+import {CityName, COMPONENT_MAP, Nullable, SortType} from '../../types/index.js';
+import {Logger} from '../../libs/logger/index.js';
+import {OfferEntity} from './offer.entity.js';
+import {CreateOfferDTO} from './dto/create-offer.dto.js';
+import {UpdateOfferDTO} from './dto/update-offer.dto.js';
+import {OFFER_LIMIT} from './offer-limit.constant.js';
+import {calculateOfferLimits} from '../../helpers/index.js';
+import {Types} from 'mongoose';
+import {addFavoriteStatusPipeline, USER_LOOKUP_PIPELINE} from './index.js';
+import {CommentService} from '../comment/index.js';
 
 
 @injectable()
 export class DefaultOfferService implements OfferService {
   constructor(
     @inject(COMPONENT_MAP.LOGGER) private readonly logger: Logger,
-    @inject(COMPONENT_MAP.OFFER_MODEL) private readonly offerModel: types.ModelType<OfferEntity>
+    @inject(COMPONENT_MAP.OFFER_MODEL) private readonly offerModel: types.ModelType<OfferEntity>,
+    @inject(COMPONENT_MAP.COMMENT_SERVICE) private readonly commentService: CommentService
   ) {}
 
   public async create(dto: CreateOfferDTO): Promise<DocumentType<OfferEntity>> {
@@ -27,14 +29,16 @@ export class DefaultOfferService implements OfferService {
     return result;
   }
 
-  public async find (count?: number): Promise<DocumentType<OfferEntity>[]> {
+  public async find (count: number, userId: string): Promise<DocumentType<OfferEntity>[]> {
     const limit = calculateOfferLimits(count);
 
-    return this.offerModel
-      .find()
-      .sort({ createdAt: SortType.Down })
-      .limit(limit)
-      .populate(['userId'])
+    return await this.offerModel
+      .aggregate([
+        ...USER_LOOKUP_PIPELINE,
+        ...addFavoriteStatusPipeline(userId),
+        {$sort: {createdAt: SortType.Down}},
+        {$limit: limit},
+      ])
       .exec();
   }
 
@@ -50,19 +54,15 @@ export class DefaultOfferService implements OfferService {
     return result[0] || null;
   }
 
-  public async findPremium (city: CityName): Promise<DocumentType<OfferEntity>[]> {
+  public async findPremium (city: CityName, userId: string): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({ city, isPremium: true })
-      .sort({ createdAt: SortType.Down })
-      .limit(OFFER_LIMIT.COUNT.PREMIUM)
-      .populate(['userId'])
-      .exec();
-  }
-
-  public async deleteById (offerId: string): Promise<Nullable<DocumentType<OfferEntity>>> {
-    return this.offerModel
-      .findByIdAndDelete(offerId)
-      .exec();
+      .aggregate([
+        { $match: { 'city': city, isPremium: true } },
+        ...USER_LOOKUP_PIPELINE,
+        ...addFavoriteStatusPipeline(userId),
+        { $sort: { createdAt: SortType.Down } },
+        { $limit: OFFER_LIMIT.COUNT.PREMIUM },
+      ]);
   }
 
   public async updateById (offerId: string, dto: UpdateOfferDTO): Promise<Nullable<DocumentType<OfferEntity>>> {
@@ -70,6 +70,15 @@ export class DefaultOfferService implements OfferService {
       .findByIdAndUpdate(offerId, dto, {new: true})
       .populate(['userId'])
       .exec();
+  }
+
+  public async deleteById (offerId: string): Promise<Nullable<DocumentType<OfferEntity>>> {
+    const result = await this.offerModel
+      .findByIdAndDelete(offerId)
+      .exec();
+
+    await this.commentService.deleteByOfferId(offerId);
+    return result;
   }
 
   public async exists (documentId: string): Promise<boolean> {
@@ -110,5 +119,11 @@ export class DefaultOfferService implements OfferService {
         { $match: { isFavorite: true }},
       ])
       .exec();
+  }
+
+  public async isOfferAuthor(offerId: string, userId: string): Promise<boolean> {
+    const offer = await this.offerModel.findOne({ _id: offerId });
+
+    return offer?.userId?.toString() === userId;
   }
 }
