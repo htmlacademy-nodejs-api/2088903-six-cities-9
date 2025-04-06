@@ -10,6 +10,7 @@ import { UpdateOfferDTO } from './dto/update-offer.dto.js';
 import { OFFER_LIMIT } from './offer-limit.constant.js';
 import { calculateOfferLimits } from '../../helpers/index.js';
 
+
 @injectable()
 export class DefaultOfferService implements OfferService {
   constructor(
@@ -85,7 +86,7 @@ export class DefaultOfferService implements OfferService {
         offerId,
         {
           $set: {
-            rating: newRating,
+            rating: newRating.toFixed(OFFER_LIMIT.RATING.DECIMAL_PLACE),
             commentsCount: newCommentsCount
           }
         },
