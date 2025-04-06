@@ -13,7 +13,7 @@ export class ValidateDTOMiddleware implements Middleware {
     const dtoInstance = plainToInstance(this.dto, body);
     const errors = await validate(dtoInstance);
 
-    if (errors.length > 0) {
+    if (errors.length) {
       throw new ValidationError(`Validation error: ${path}`, reduceValidationErrors(errors));
     }
 
