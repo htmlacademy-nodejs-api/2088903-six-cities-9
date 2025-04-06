@@ -64,7 +64,63 @@ npm run ts -- <Путь к модулю с ts-кодом>
 npm start
 ```
 
+Собирает и запускает проект
+
+#### Запустить проект в dev окружении
+
+```bash
+npm run start:dev
+```
+
+Запускает проект с использованием `nodemon`
+
+### CLI
+Для запуска приложения в CLI режиме доступны сценарии
+
+`npm run cli:version` – Выводит версию CLI-приложения.  
+`npm run cli:help` – Показывает справочную информацию о доступных командах.  
+`npm run cli:import` – Импортирует данные из TSV файла **./mocks/mocks.tsv** в БД.  
+`npm run cli:generate` – Генерирует 50 записей и сохраняет их в **./mocks/new-mocks.tsv**, используя API **http://localhost:3123/api**.  
+`npm run mock:server` – Запускает json-server с данными из **./mocks/mock-server-data.json** на **http://localhost:3123**.
+
+#### Пример команды --import
+
+```bash
+npm run ts ./src/main.cli.ts -- --import ./mocks/test-data.tsv admin test localhost 27017 six-cities secret
+```
+
+Команда для импорта 50 моковых записей из файла `./mocks/test-data.tsv` в базу данных MongoDB с использованием имени пользователя `admin`, пароля `test`, хоста `localhost`, порта `27017`, имени базы данных `six-cities`, соли `secret`
+
+
+## Список всех переменных окружения
+
+`PORT=5000` — Порт, на котором работает приложение  
+`SALT=secret `— Соль для хеширования  
+`DB_HOST=127.0.0.1` — Адрес базы данных  
+`DB_USER=user` — Пользователь базы данных  
+`DB_PASSWORD=password` — Пароль базы данных  
+`DB_PORT=27017` — Порт базы данных  
+`DB_UI_PORT=8081` — Порт графического интерфейса для управления базой данных  
+`UPLOAD_DIRECTORY=./upload` — Директория для загрузки файлов  
+`STATIC_DIRECTORY_PATH=./static` — Директория для статических файлов  
+`JWT_SECRET=secret` — Секрет JWT
+`JWT_ALGORITHM=HS256` — Алгоритм JWT
+`JWT_EXPIRED=2d` — Время жизни JWT
+`HOST=127.0.0.1` — Хост сервиса
+
 В процессе запуска проекта будет выполнен процесс «Сборки проекта» и запуска результирующего кода.
+
+#### Запуск docker с использованием docker compose и env файла
+
+```bash
+docker compose --file ./docker-compose.yml  --env-file ./.env  --project-name "six-cities" up -d
+```
+
+#### Остановка docker
+
+```bash
+docker compose --file ./docker-compose.yml --env-file ./.env --project-name "six-cities" down
+```
 
 ## Структура проекта
 
