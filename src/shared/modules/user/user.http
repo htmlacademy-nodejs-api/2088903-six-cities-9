@@ -7,7 +7,7 @@ Content-Type: application/json
 
 {
   "name": "Ivan",
-  "email": "ivan4@mail.ru",
+  "email": "ivan5@mail.ru",
   "password": "shining",
   "type": "pro"
 }
@@ -20,7 +20,7 @@ POST http://localhost:5000/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "ivan4@mail.ru",
+  "email": "ivan5@mail.ru",
   "password": "shining"
 }
 

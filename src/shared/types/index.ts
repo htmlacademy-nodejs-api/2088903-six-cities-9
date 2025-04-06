@@ -12,3 +12,4 @@ export { COMPONENT_MAP } from './component-map.constant.js';
 export { SortType } from './sort-type.enum.js';
 export { Nullable } from './nullable.type.js';
 export { DocumentExists } from './document-exists.interface.js';
+export { AuthorCheck } from './author-check.interface.js';

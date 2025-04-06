@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import {
+  AuthorCheckMiddleware,
   BaseController, DocumentExistsMiddleware,
   HttpError,
   HttpMethod, PrivateRouteMiddleware,
@@ -67,6 +68,7 @@ export class OfferController extends BaseController {
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDTOMiddleware(UpdateOfferDTO),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new AuthorCheckMiddleware(this.offerService),
       ]
     });
     this.addRoute({
@@ -76,7 +78,8 @@ export class OfferController extends BaseController {
       middlewares: [
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new AuthorCheckMiddleware(this.offerService),
       ]
     });
     this.addRoute({
