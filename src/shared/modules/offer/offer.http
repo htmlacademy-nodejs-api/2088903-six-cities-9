@@ -41,8 +41,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjFhMzE1YWE0YzhiN2VkM2NkM
 ###
 
 # Получить предложение по идентификатору
-GET http://localhost:5000/offers/67dd3721d15eeb038cd8ebc4 HTTP/1.1
-
+GET http://localhost:5000/offers/67f1b78745a075cef683c205 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjFhMzE1YWE0YzhiN2VkM2NkMjVhMyIsImVtYWlsIjoiaXZhbjRAbWFpbC5ydSIsImlhdCI6MTc0Mzg5NDI1NywiZXhwIjoxNzQ0MDY3MDU3fQ._QT9SCJqRp1Xu-dPSCJF-w1AsRmmOF_8NL571lEHhbE
 ###
 
 ## Удалить предложение по идентификатору
@@ -65,6 +66,6 @@ Content-Type: application/json
 ###
 
 ## Список комментариев к объявлению
-GET http://localhost:5000/offers/628a27d729c45f2bf9f6806a/comments HTTP/1.1
+GET http://localhost:5000/offers/67f1b78745a075cef683c205/comments HTTP/1.1
 
 ###

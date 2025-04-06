@@ -5,7 +5,7 @@ import {
   prop,
 } from '@typegoose/typegoose';
 import { Location, CityName, Accommodation, Amenities } from '../../types/index.js';
-import {UserRef} from '../../types/entity-refs.js';
+import { UserRef } from '../../types/entity-refs.js';
 
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging

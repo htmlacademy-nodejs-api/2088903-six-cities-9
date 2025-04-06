@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import {
-  BaseController,
+  BaseController, DocumentExistsMiddleware,
   HttpError,
   HttpMethod, PrivateRouteMiddleware,
   UploadFileMiddleware,
@@ -21,6 +21,7 @@ import { CreateUserDTO } from './dto/create-user.dto.js';
 import { LoginUserDTO } from './dto/login-user.dto.js';
 import { AuthService } from '../auth/index.js';
 import { LoggedUserRDO } from './rdo/logged-user.rdo.js';
+import {OfferService, ParamOfferId} from '../offer/index.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -29,6 +30,7 @@ export class UserController extends BaseController {
     @inject(COMPONENT_MAP.USER_SERVICE) private readonly userService: UserService,
     @inject(COMPONENT_MAP.CONFIG) private readonly configService: Config<RestSchema>,
     @inject(COMPONENT_MAP.AUTH_SERVICE) private readonly authService: AuthService,
+    @inject(COMPONENT_MAP.OFFER_SERVICE) private readonly offerService: OfferService,
   ) {
     super(logger);
     this.logger.info('Register routes for UserController');
@@ -60,6 +62,17 @@ export class UserController extends BaseController {
         new ValidateObjectIdMiddleware('userId'),
         new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
       ]
+    });
+
+    this.addRoute({
+      path: '/favorites/:offerId',
+      method: HttpMethod.Post,
+      handler: this.addFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+      ],
     });
   }
 
@@ -104,5 +117,20 @@ export class UserController extends BaseController {
     this.created(res, {
       filepath: req.file?.path
     });
+  }
+
+  public async addFavorite({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const isExist = await this.userService.isFavoriteExist(tokenPayload.id, params.offerId);
+
+    if (isExist) {
+      throw new HttpError(
+        StatusCodes.CONFLICT,
+        `Offer ${params.offerId} is already in favorites`,
+        'UserController',
+      );
+    }
+
+    const result = await this.userService.addFavorite(tokenPayload.id, params.offerId);
+    this.ok(res, fillDTO(UserRDO, result));
   }
 }

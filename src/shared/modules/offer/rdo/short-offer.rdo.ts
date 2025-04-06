@@ -1,30 +1,23 @@
 import { Expose, Type } from 'class-transformer';
-import { Accommodation, Amenities, CityName } from '../../../types/index.js';
+import { Accommodation, City, Location } from '../../../types/index.js';
 import { UserRDO } from '../../user/index.js';
-import { LocationRDO } from './location.rdo.js';
 
 
-export class OfferRDO {
+export class ShortOfferRDO {
   @Expose()
   public id: string;
 
   @Expose()
   public title!: string;
 
-  @Expose()
-  public description!: string;
-
   @Expose({ name: 'createdAt' })
   public date!: Date;
 
   @Expose()
-  public city!: CityName;
+  public city!: City;
 
   @Expose()
   public preview!: string;
-
-  @Expose()
-  public images!: string[];
 
   @Expose()
   public isPremium!: boolean;
@@ -39,25 +32,15 @@ export class OfferRDO {
   public accommodation!: Accommodation;
 
   @Expose()
-  public rooms!: number;
-
-  @Expose()
-  public guests!: number;
-
-  @Expose()
   public price!: number;
-
-  @Expose()
-  public amenities!: Amenities[];
-
-  @Expose()
-  @Type(() => UserRDO)
-  public userId!: UserRDO;
 
   @Expose()
   public commentCount!: number;
 
   @Expose()
-  @Type(() => LocationRDO)
-  public location!: LocationRDO;
+  @Type(() => UserRDO)
+  public user!: UserRDO;
+
+  @Expose()
+  public location!: Location;
 }

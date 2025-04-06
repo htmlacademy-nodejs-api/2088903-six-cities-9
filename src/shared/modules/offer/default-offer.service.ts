@@ -9,6 +9,8 @@ import { CreateOfferDTO } from './dto/create-offer.dto.js';
 import { UpdateOfferDTO } from './dto/update-offer.dto.js';
 import { OFFER_LIMIT } from './offer-limit.constant.js';
 import { calculateOfferLimits } from '../../helpers/index.js';
+import { Types } from 'mongoose';
+import { USER_LOOKUP_PIPELINE, addFavoriteStatusPipeline } from './index.js';
 
 
 @injectable()
@@ -25,13 +27,6 @@ export class DefaultOfferService implements OfferService {
     return result;
   }
 
-  public async findById(offerId: string): Promise<Nullable<DocumentType<OfferEntity>>> {
-    return this.offerModel
-      .findById(offerId)
-      .populate(['userId'])
-      .exec();
-  }
-
   public async find (count?: number): Promise<DocumentType<OfferEntity>[]> {
     const limit = calculateOfferLimits(count);
 
@@ -41,6 +36,18 @@ export class DefaultOfferService implements OfferService {
       .limit(limit)
       .populate(['userId'])
       .exec();
+  }
+
+  public async findById(offerId: string, userId: string): Promise<Nullable<DocumentType<OfferEntity>>>{
+    const result = await this.offerModel
+      .aggregate([
+        { $match: { '_id': new Types.ObjectId(offerId) } },
+        ...USER_LOOKUP_PIPELINE,
+        ...addFavoriteStatusPipeline(userId, offerId),
+      ])
+      .exec();
+
+    return result[0] || null;
   }
 
   public async findPremium (city: CityName): Promise<DocumentType<OfferEntity>[]> {
@@ -92,6 +99,16 @@ export class DefaultOfferService implements OfferService {
         },
         { new: true }
       )
+      .exec();
+  }
+
+  public async findFavoritesByUserId(userId: string): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel
+      .aggregate([
+        ...USER_LOOKUP_PIPELINE,
+        ...addFavoriteStatusPipeline(userId),
+        { $match: { isFavorite: true }},
+      ])
       .exec();
   }
 }

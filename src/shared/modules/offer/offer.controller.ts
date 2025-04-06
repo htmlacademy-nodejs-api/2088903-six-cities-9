@@ -19,6 +19,7 @@ import { CreateOfferRequest } from './create-offer-request.type.js';
 import { UpdateOfferDTO } from './dto/update-offer.dto.js';
 import { CommentRDO, CommentService } from '../comment/index.js';
 import { CreateOfferDTO } from './dto/create-offer.dto.js';
+import { ShortOfferRDO } from './rdo/short-offer.rdo.js';
 
 
 @injectable()
@@ -32,7 +33,11 @@ export class OfferController extends BaseController {
 
     this.logger.info('Register routes for OfferController');
 
-    this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Get,
+      handler: this.index,
+    });
     this.addRoute({
       path: '/',
       method: HttpMethod.Post,
@@ -83,7 +88,7 @@ export class OfferController extends BaseController {
     });
   }
 
-  public async index(_req: Request, res: Response): Promise<void> {
+  /* public async index(_req: Request, res: Response): Promise<void> {
     const offers = await this.offerService.find();
 
     if (!offers.length) {
@@ -95,6 +100,21 @@ export class OfferController extends BaseController {
     }
 
     this.ok(res, fillDTO(OfferRDO, offers));
+  } */
+
+  public async index({ query, tokenPayload }: Request, res: Response): Promise<void> {
+    const count = Number.parseInt(query.count as string, 10);
+    const offers = await this.offerService.find(count, tokenPayload?.id);
+
+    if (!offers.length) {
+      throw new HttpError(
+        StatusCodes.OK,
+        'The offers was not found.',
+        'OfferController',
+      );
+    }
+
+    this.ok(res, fillDTO(ShortOfferRDO, offers));
   }
 
   public async create({ body, tokenPayload }: CreateOfferRequest, res: Response): Promise<void> {
@@ -102,9 +122,8 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(OfferRDO, result));
   }
 
-  public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    const { offerId } = params;
-    const offer = await this.offerService.findById(offerId);
+  public async show({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const offer = await this.offerService.findById(params.offerId, tokenPayload?.id);
 
     this.ok(res, fillDTO(OfferRDO, offer));
   }

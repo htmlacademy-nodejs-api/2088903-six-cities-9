@@ -8,7 +8,7 @@ import { CreateUserDTO } from './dto/create-user.dto.js';
 import { COMPONENT_MAP, Nullable } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { UpdateUserDTO } from './dto/update-user.dto.js';
-import { OfferEntity } from '../offer/index.js';
+import { OfferEntity, OfferService } from '../offer/index.js';
 import { USER } from './user.constant.js';
 
 
@@ -16,7 +16,8 @@ import { USER } from './user.constant.js';
 export class DefaultUserService implements UserService {
   constructor(
     @inject(COMPONENT_MAP.LOGGER) private readonly logger: Logger,
-    @inject(COMPONENT_MAP.USER_MODEL) private readonly userModel: types.ModelType<UserEntity>
+    @inject(COMPONENT_MAP.USER_MODEL) private readonly userModel: types.ModelType<UserEntity>,
+    @inject(COMPONENT_MAP.OFFER_SERVICE) private readonly offerService: OfferService
   ) {}
 
   public async create(dto: CreateUserDTO, salt: string): Promise<DocumentType<UserEntity>> {
@@ -53,16 +54,7 @@ export class DefaultUserService implements UserService {
   }
 
   public async findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]> {
-    const user = await this.userModel
-      .findById(userId)
-      .populate('favoriteOffers')
-      .exec();
-
-    if (!user) {
-      throw new Error('User not found');
-    }
-
-    return user.favoriteOffers || [];
+    return this.offerService.findFavoritesByUserId(userId);
   }
 
   public async addFavorite(userId: string, offerId: string): Promise<Nullable<DocumentType<UserEntity>>> {
@@ -79,5 +71,15 @@ export class DefaultUserService implements UserService {
       { $pull: { favorites: new Types.ObjectId(offerId) } },
       { new: true }
     ).exec();
+  }
+
+  public async isFavoriteExist(userId: string, offerId: string): Promise<boolean> {
+    const result = await this.userModel.aggregate([
+      { $match: { _id: new Types.ObjectId(userId) } },
+      { $unwind: '$favorites' },
+      { $match: { 'favorites': new Types.ObjectId(offerId) } }
+    ]);
+
+    return result.length > 0;
   }
 }
