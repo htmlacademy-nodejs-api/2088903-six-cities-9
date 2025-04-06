@@ -20,3 +20,4 @@ export { ApplicationError } from './types/application-error.enum.js';
 export { ValidationExceptionFilter } from './exception-filter/validation.exception-filter.js';
 export { ValidatePathDTOMiddleware } from './middleware/validate-path-dto.middleware.js';
 export { AuthorCheckMiddleware } from './middleware/author-check.middleware.js';
+export { RejectAuthenticatedMiddleware } from './middleware/reject-authenticated.middleware.js';

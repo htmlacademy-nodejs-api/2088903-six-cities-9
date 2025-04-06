@@ -53,7 +53,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjE0ODAxYmQ5ZTU0NmIyNjczN
 
 ###
 
-## Отправить аватар пользоватетеля
+## Загрузить аватар пользоватетеля
 
 POST http://localhost:5000/users/67f14801bd9e546b26736ab9/avatar HTTP/1.1
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
