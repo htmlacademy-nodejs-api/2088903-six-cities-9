@@ -7,3 +7,4 @@ export { createOfferContainer } from './offer.container.js';
 export { OFFER_LIMIT } from './offer-limit.constant.js';
 export { OfferRDO } from './rdo/offer.rdo.js';
 export { OFFER_VALIDATION_MESSAGE } from './dto/offer-validation.messages.js';
+export { ParamOfferId } from './type/param-offerid.type.js';

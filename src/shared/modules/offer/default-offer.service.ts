@@ -70,29 +70,23 @@ export class DefaultOfferService implements OfferService {
       .then((r) => !!r);
   }
 
-  public async incCommentCount(offerId: string): Promise<Nullable<DocumentType<OfferEntity>>> {
-    return this.offerModel
-      .findByIdAndUpdate(
-        offerId,
-        { $inc: { commentCount: 1 } },
-        { new: true }
-      )
-      .exec();
-  }
+  public async updateRatingAndCommentCount(offerId: string, newCommentRating: number): Promise<Nullable<DocumentType<OfferEntity>>> {
+    const offer = await this.offerModel.findById(offerId).exec();
+    if (!offer) {
+      return null;
+    }
 
-  public async updateRating (offerId: string, newCommentRating: number): Promise<Nullable<DocumentType<OfferEntity>>> {
+    const totalRating = offer.rating * offer.commentsCount;
+    const newCommentsCount = offer.commentsCount + 1;
+    const newRating = (totalRating + newCommentRating) / newCommentsCount;
+
     return this.offerModel
       .findByIdAndUpdate(
         offerId,
         {
-          $inc: { totalRating: newCommentRating },
           $set: {
-            rating: {
-              $divide: [
-                '$totalRating',
-                '$commentCount'
-              ]
-            }
+            rating: newRating,
+            commentsCount: newCommentsCount
           }
         },
         { new: true }

@@ -1,14 +1,14 @@
 # Пользователи
+
 ## Создать нового пользователя
 
 POST http://localhost:5000/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Ivano",
-  "email": "ivano@mail.ru",
+  "name": "Ivan",
+  "email": "ivan4@mail.ru",
   "password": "shining",
-  "avatar": "https://domainname.com/face.png",
   "type": "pro"
 }
 
@@ -20,30 +20,51 @@ POST http://localhost:5000/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "ivan@mail.ru",
+  "email": "ivan4@mail.ru",
   "password": "shining"
 }
 
 ###
 
-## Отправить изображение
-
-POST http://localhost:5000/users/62823cb2c5a64ce9f1b50eb6/avatar HTTP/1.1
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="avatar"; filename="screen.png"
-Content-Type: image/png
-
-< /Users/spider_net/Desktop/screen.png
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-
-##
+## Проверить токен пользователя
+GET http://localhost:5000/users/login HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjFhMzE1YWE0YzhiN2VkM2NkMjVhMyIsImVtYWlsIjoiaXZhbjRAbWFpbC5ydSIsImlhdCI6MTc0Mzg5NDI1NywiZXhwIjoxNzQ0MDY3MDU3fQ._QT9SCJqRp1Xu-dPSCJF-w1AsRmmOF_8NL571lEHhbE
 
 ###
 
-## Проверить токен пользователя
-GET http://localhost:5000/users/login HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRvcmFuc0BvdmVybG9vay5uZXQiLCJpZCI6IjY0NzBiYzM4M2UzMGRiNjc5ZGZhYzJkMiIsImlhdCI6MTY4NTk3NTQ4MiwiZXhwIjoxNjg2MTQ4MjgyfQ.Gq2-B1egouAnMxmXlR2ElVT6wCa97PS6lxzVI8LnGvo
+## Получить список избранных предложений пользоватетеля
+GET http://localhost:5000/users/favorites HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjE5OGM1ZWVjNTIxZWE5YWUyMjVkNSIsIm5hbWUiOiJJdmFuIiwiZW1haWwiOiJpdmFuMkBtYWlsLnJ1IiwiaWF0IjoxNzQzODg2NTQyLCJleHAiOjE3NDQwNTkzNDJ9.Lg6UB4FNN1S8-mWwKaz-ORKQLU_4IgworBcmna0tJd4
+
+###
+
+## Добавить предложение в избранное пользоватетеля
+POST http://localhost:5000/users/favorites/67dd3721d15eeb038cd8ebc4 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjE0ODAxYmQ5ZTU0NmIyNjczNmFiOSIsIm5hbWUiOiJJdmFuIiwiZW1haWwiOiJpdmFuMkBtYWlsLnJ1IiwiaWF0IjoxNzQzODY1ODY1LCJleHAiOjE3NDQwMzg2NjV9.rSLrqQs7kd91YxIYb9fUiqll9D7zjJ1wP5DTbXC5FLU
+
+###
+
+## Удалить предложение из избранного пользоватетеля
+DELETE http://localhost:5000/users/favorites/67dd3721d15eeb038cd8ebc4 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjE0ODAxYmQ5ZTU0NmIyNjczNmFiOSIsIm5hbWUiOiJJdmFuIiwiZW1haWwiOiJpdmFuMkBtYWlsLnJ1IiwiaWF0IjoxNzQzODY1ODY1LCJleHAiOjE3NDQwMzg2NjV9.rSLrqQs7kd91YxIYb9fUiqll9D7zjJ1wP5DTbXC5FLU
+
+###
+
+## Отправить аватар пользоватетеля
+
+POST http://localhost:5000/users/67f14801bd9e546b26736ab9/avatar HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="avatar.png"
+Content-Type: image/png
+
+< C:\WEB\avatar.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+##
 
 ###

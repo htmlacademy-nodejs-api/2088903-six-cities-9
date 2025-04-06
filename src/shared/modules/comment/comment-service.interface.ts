@@ -5,7 +5,7 @@ import { CommentEntity } from './comment.entity.js';
 import { Nullable } from '../../types/index.js';
 
 export interface CommentService {
-  create(dto: CreateCommentDTO): Promise<DocumentType<CommentEntity>>;
-  findByOfferId(offerId: string): Promise<DocumentType<CommentEntity>[]>;
+  create(dto: CreateCommentDTO, offerId: string): Promise<DocumentType<CommentEntity>>;
+  findByOfferId(offerId: string): Promise<Nullable<DocumentType<CommentEntity>>[]>;
   deleteByOfferId(offerId: string): Promise<Nullable<number>>;
 }

@@ -8,6 +8,7 @@ Content-Type: application/json
 ## Добавить новое предложение
 POST http://localhost:5000/offers HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjFhMzE1YWE0YzhiN2VkM2NkMjVhMyIsImVtYWlsIjoiaXZhbjRAbWFpbC5ydSIsImlhdCI6MTc0Mzg5NDI1NywiZXhwIjoxNzQ0MDY3MDU3fQ._QT9SCJqRp1Xu-dPSCJF-w1AsRmmOF_8NL571lEHhbE
 
 {
   "title": "Домик у пруда — волшебное место",
@@ -23,14 +24,14 @@ Content-Type: application/json
     "https://domainname.com/image-6.jpg"
   ],
   "isPremium": true,
-  "rating": 5,
+  "rating": 4,
   "accommodation": "house",
   "rooms": 2,
   "guests": 6,
   "price": 1560,
   "amenities": ["Breakfast", "Air conditioning", "Fridge"],
-  "userId": "67dd3721d15eeb038cd8ebbf",
-  "commentCount": 0,
+  "userId": "67f1a315aa4c8b7ed3cd25a3",
+  "commentsCount": 0,
   "location": {
     "latitude": 48.85661,
     "longitude": 2.351499
@@ -40,7 +41,7 @@ Content-Type: application/json
 ###
 
 # Получить предложение по идентификатору
-GET http://localhost:5000/offers/67dd3721d15eeb038cd8ebc1 HTTP/1.1
+GET http://localhost:5000/offers/67dd3721d15eeb038cd8ebc4 HTTP/1.1
 
 ###
 
@@ -52,7 +53,7 @@ DELETE http://localhost:5000/offers/67dd3721d15eeb038cd8ebc1 HTTP/1.1
 
 ## Обновить предложение
 
-PATCH http://localhost:5000/offers/652e71c6d9f30c786a73f139 HTTP/1.1
+PATCH http://localhost:5000/offers/67dd3721d15eeb038cd8ebc4 HTTP/1.1
 Content-Type: application/json
 
 {
