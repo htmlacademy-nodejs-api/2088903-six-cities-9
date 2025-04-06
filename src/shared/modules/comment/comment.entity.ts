@@ -3,7 +3,7 @@ import {
   getModelForClass,
   modelOptions,
   prop,
-  Ref
+  Ref,
 } from '@typegoose/typegoose';
 
 import { OfferEntity } from '../offer/index.js';
@@ -21,22 +21,22 @@ export interface CommentEntity extends defaultClasses.Base {}
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class CommentEntity extends defaultClasses.TimeStamps {
   @prop({ trim: true, required: true })
-  public text: string;
+  public comment!: string;
 
   @prop({
     ref: () => OfferEntity,
     required: true
   })
-  public offerId: Ref<OfferEntity>;
+  public offerId!: Ref<OfferEntity>;
 
   @prop({
     ref: () => UserEntity,
     required: true,
   })
-  public userId: Ref<UserEntity>;
+  public userId!: Ref<UserEntity>;
 
   @prop({ required: true })
-  public rating: number;
+  public rating!: number;
 }
 
 export const CommentModel = getModelForClass(CommentEntity);

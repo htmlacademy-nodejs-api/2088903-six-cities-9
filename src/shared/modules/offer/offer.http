@@ -8,6 +8,7 @@ Content-Type: application/json
 ## Добавить новое предложение
 POST http://localhost:5000/offers HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjFhMzE1YWE0YzhiN2VkM2NkMjVhMyIsImVtYWlsIjoiaXZhbjRAbWFpbC5ydSIsImlhdCI6MTc0Mzg5NDI1NywiZXhwIjoxNzQ0MDY3MDU3fQ._QT9SCJqRp1Xu-dPSCJF-w1AsRmmOF_8NL571lEHhbE
 
 {
   "title": "Домик у пруда — волшебное место",
@@ -23,14 +24,14 @@ Content-Type: application/json
     "https://domainname.com/image-6.jpg"
   ],
   "isPremium": true,
-  "rating": 5,
+  "rating": 4,
   "accommodation": "house",
   "rooms": 2,
   "guests": 6,
   "price": 1560,
   "amenities": ["Breakfast", "Air conditioning", "Fridge"],
-  "userId": "67dd3721d15eeb038cd8ebbf",
-  "commentCount": 0,
+  "userId": "67f2e82c2b8e90d54462d7c9",
+  "commentsCount": 0,
   "location": {
     "latitude": 48.85661,
     "longitude": 2.351499
@@ -40,30 +41,36 @@ Content-Type: application/json
 ###
 
 # Получить предложение по идентификатору
-GET http://localhost:5000/offers/67dd3721d15eeb038cd8ebc1 HTTP/1.1
-
-###
-
-## Удалить предложение по идентификатору
-
-DELETE http://localhost:5000/offers/67dd3721d15eeb038cd8ebc1 HTTP/1.1
-
+GET http://localhost:5000/offers/67f1b78745a075cef683c205 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjFhMzE1YWE0YzhiN2VkM2NkMjVhMyIsImVtYWlsIjoiaXZhbjRAbWFpbC5ydSIsImlhdCI6MTc0Mzg5NDI1NywiZXhwIjoxNzQ0MDY3MDU3fQ._QT9SCJqRp1Xu-dPSCJF-w1AsRmmOF_8NL571lEHhbE
 ###
 
 ## Обновить предложение
 
-PATCH http://localhost:5000/offers/652e71c6d9f30c786a73f139 HTTP/1.1
+PATCH http://localhost:5000/offers/67f1b78745a075cef683c205 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjFhMzE1YWE0YzhiN2VkM2NkMjVhMyIsImVtYWlsIjoiaXZhbjRAbWFpbC5ydSIsImlhdCI6MTc0Mzg5NDI1NywiZXhwIjoxNzQ0MDY3MDU3fQ._QT9SCJqRp1Xu-dPSCJF-w1AsRmmOF_8NL571lEHhbE
 
 {
-  "title": "Ночной дозор 3",
-  "description": "Проверка обновления",
+  "title": "Домик у другого такого же домика — так себе",
+  "description": "Самый обычный домик у другого такого же домика",
   "price": 1100
 }
 
 ###
 
-## Список комментариев к объявлению
-GET http://localhost:5000/offers/628a27d729c45f2bf9f6806a/comments HTTP/1.1
+## Удалить предложение
+
+DELETE http://localhost:5000/offers/67f1b79945a075cef683c207 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjJlODJjMmI4ZTkwZDU0NDYyZDdjOSIsImVtYWlsIjoiaXZhbjVAbWFpbC5ydSIsImlhdCI6MTc0Mzk3MjM5OSwiZXhwIjoxNzQ0MTQ1MTk5fQ.770WKY114l4vg4qzE93Nnixz28zAVCt8Ws3KBFuWC44
+
+###
+
+## Получить список премиум предложений по городу
+GET http://localhost:5000/offers/premium/Paris HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjY3ZjFhMzE1YWE0YzhiN2VkM2NkMjVhMyIsImVtYWlsIjoiaXZhbjRAbWFpbC5ydSIsImlhdCI6MTc0Mzg5NDI1NywiZXhwIjoxNzQ0MDY3MDU3fQ._QT9SCJqRp1Xu-dPSCJF-w1AsRmmOF_8NL571lEHhbE
 
 ###

@@ -194,7 +194,7 @@ paths:
         '409':
           description: Введена некорректная информация.
 
-  /offers/detail/{offerId}:
+  /offers/{offerId}:
     parameters:
       - name: offerId
         in: path

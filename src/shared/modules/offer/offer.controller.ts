@@ -3,22 +3,26 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 import {
+  AuthorCheckMiddleware,
   BaseController, DocumentExistsMiddleware,
   HttpError,
   HttpMethod, PrivateRouteMiddleware,
   ValidateDTOMiddleware,
-  ValidateObjectIdMiddleware
+  ValidateObjectIdMiddleware, ValidatePathDTOMiddleware
 } from '../../libs/rest/index.js';
 import { OfferService } from './offer-service.interface.js';
 import { ParamOfferId } from './type/param-offerid.type.js';
-import { COMPONENT_MAP } from '../../types/index.js';
+import { CityName, COMPONENT_MAP } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { OfferRDO } from './rdo/offer.rdo.js';
 import { CreateOfferRequest } from './create-offer-request.type.js';
 import { UpdateOfferDTO } from './dto/update-offer.dto.js';
-import { CommentRDO, CommentService } from '../comment/index.js';
+import { CommentService } from '../comment/index.js';
 import { CreateOfferDTO } from './dto/create-offer.dto.js';
+import { ShortOfferRDO } from './rdo/short-offer.rdo.js';
+import { ParamCity } from './type/param-city.type.js';
+import { PremiumDTO } from './dto/premium.dto.js';
 
 
 @injectable()
@@ -32,7 +36,11 @@ export class OfferController extends BaseController {
 
     this.logger.info('Register routes for OfferController');
 
-    this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Get,
+      handler: this.index,
+    });
     this.addRoute({
       path: '/',
       method: HttpMethod.Post,
@@ -53,16 +61,6 @@ export class OfferController extends BaseController {
     });
     this.addRoute({
       path: '/:offerId',
-      method: HttpMethod.Delete,
-      handler: this.delete,
-      middlewares: [
-        new PrivateRouteMiddleware(),
-        new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
-      ]
-    });
-    this.addRoute({
-      path: '/:offerId',
       method: HttpMethod.Patch,
       handler: this.update,
       middlewares: [
@@ -70,21 +68,34 @@ export class OfferController extends BaseController {
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDTOMiddleware(UpdateOfferDTO),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new AuthorCheckMiddleware(this.offerService),
       ]
     });
     this.addRoute({
-      path: '/:offerId/comments',
-      method: HttpMethod.Get,
-      handler: this.getComments,
+      path: '/:offerId',
+      method: HttpMethod.Delete,
+      handler: this.delete,
       middlewares: [
+        new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new AuthorCheckMiddleware(this.offerService),
       ]
     });
+    this.addRoute({
+      path: '/premium/:city',
+      method: HttpMethod.Get,
+      handler: this.showPremium,
+      middlewares: [
+        new ValidatePathDTOMiddleware(PremiumDTO, 'city'),
+      ],
+    });
+
   }
 
-  public async index(_req: Request, res: Response): Promise<void> {
-    const offers = await this.offerService.find();
+  public async index({ query, tokenPayload }: Request, res: Response): Promise<void> {
+    const count = Number.parseInt(query.count as string, 10);
+    const offers = await this.offerService.find(count, tokenPayload?.id);
 
     if (!offers.length) {
       throw new HttpError(
@@ -94,7 +105,7 @@ export class OfferController extends BaseController {
       );
     }
 
-    this.ok(res, fillDTO(OfferRDO, offers));
+    this.ok(res, fillDTO(ShortOfferRDO, offers));
   }
 
   public async create({ body, tokenPayload }: CreateOfferRequest, res: Response): Promise<void> {
@@ -102,11 +113,15 @@ export class OfferController extends BaseController {
     this.created(res, fillDTO(OfferRDO, result));
   }
 
-  public async show({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    const { offerId } = params;
-    const offer = await this.offerService.findById(offerId);
+  public async show({ params, tokenPayload }: Request<ParamOfferId>, res: Response): Promise<void> {
+    const offer = await this.offerService.findById(params.offerId, tokenPayload?.id);
 
     this.ok(res, fillDTO(OfferRDO, offer));
+  }
+
+  public async update({ body, params }: Request<ParamOfferId, unknown, UpdateOfferDTO>, res: Response): Promise<void> {
+    const updatedOffer = await this.offerService.updateById(params.offerId, body);
+    this.ok(res, fillDTO(OfferRDO, updatedOffer));
   }
 
   public async delete({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
@@ -117,13 +132,18 @@ export class OfferController extends BaseController {
     this.noContent(res, offer);
   }
 
-  public async update({ body, params }: Request<ParamOfferId, unknown, UpdateOfferDTO>, res: Response): Promise<void> {
-    const updatedOffer = await this.offerService.updateById(params.offerId, body);
-    this.ok(res, fillDTO(OfferRDO, updatedOffer));
-  }
+  public async showPremium({ params, tokenPayload }: Request<ParamCity>, res: Response): Promise<void> {
+    const city = params.city as CityName;
+    const result = await this.offerService.findPremium(city, tokenPayload?.id);
 
-  public async getComments({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
-    const comments = await this.commentService.findByOfferId(params.offerId);
-    this.ok(res, fillDTO(CommentRDO, comments));
+    if (!result.length) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `No premium offers in: ${city}`,
+        'OfferController'
+      );
+    }
+
+    this.ok(res, fillDTO(ShortOfferRDO, result));
   }
 }

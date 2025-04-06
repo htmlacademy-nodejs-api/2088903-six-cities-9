@@ -8,12 +8,14 @@ import { DatabaseClient, MongoDatabaseClient } from '../../shared/libs/database-
 import { Logger } from '../../shared/libs/logger/index.js';
 import { ConsoleLogger } from '../../shared/libs/logger/console.logger.js';
 import { DefaultUserService, UserModel } from '../../shared/modules/user/index.js';
+import { CommentModel, CommentService, DefaultCommentService } from '../../shared/modules/comment/index.js';
 
 const DEFAULT_USER_PASSWORD = '123456';
 
 export class ImportCommand implements Command {
   private readonly userService: UserService;
   private readonly offerService: OfferService;
+  private readonly commentService: CommentService;
   private readonly databaseClient: DatabaseClient;
   private readonly logger: Logger;
   private salt: string;
@@ -23,8 +25,9 @@ export class ImportCommand implements Command {
     this.onCompleteImport = this.onCompleteImport.bind(this);
 
     this.logger = new ConsoleLogger();
-    this.offerService = new DefaultOfferService(this.logger, OfferModel);
-    this.userService = new DefaultUserService(this.logger, UserModel);
+    this.commentService = new DefaultCommentService(this.logger, CommentModel);
+    this.offerService = new DefaultOfferService(this.logger, OfferModel, this.commentService);
+    this.userService = new DefaultUserService(this.logger, UserModel, this.offerService);
     this.databaseClient = new MongoDatabaseClient(this.logger);
   }
 

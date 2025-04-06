@@ -6,6 +6,9 @@ import { LocationRDO } from './location.rdo.js';
 
 export class OfferRDO {
   @Expose()
+  public id: string;
+
+  @Expose()
   public title!: string;
 
   @Expose()

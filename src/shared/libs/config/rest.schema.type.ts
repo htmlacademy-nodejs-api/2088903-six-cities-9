@@ -10,4 +10,6 @@ export type RestSchema = {
   JWT_SECRET: string;
   JWT_ALGORITHM: string;
   JWT_EXPIRED: string;
+  HOST: string;
+  STATIC_DIRECTORY_PATH: string;
 }

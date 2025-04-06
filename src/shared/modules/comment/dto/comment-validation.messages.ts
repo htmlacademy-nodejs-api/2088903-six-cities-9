@@ -8,12 +8,6 @@ export const COMMENT_VALIDATION_MESSAGES = {
   RATING: {
     MIN_VALUE: `minimum rating is ${COMMENT_LIMIT.RATING.MIN}`,
     MAX_VALUE: `maximum rating is ${COMMENT_LIMIT.RATING.MAX}`,
-    INVALID_FORMAT: 'Field rating must be an integer',
-  },
-  OFFER_ID: {
-    INVALID_ID: 'offerId must be a valid id',
-  },
-  USER_ID: {
-    INVALID_ID: 'userId must be a valid id',
-  },
+    INVALID_FORMAT: 'rating must be an integer',
+  }
 } as const;
