@@ -76,7 +76,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
   }
 
   private parseToArray<T> (string: string): T[] {
-    return string.split(SEPARATOR).map((name) => name as T);
+    return string.split(SEPARATOR) as T[];
   }
 
   private parseHost(string: string): User {
@@ -96,13 +96,13 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     });
 
     let remainingData = '';
-    let nextLinePosition = -1;
     let importedRowCount = 0;
 
     for await (const chunk of readStream) {
       remainingData += chunk.toString();
 
-      while ((nextLinePosition = remainingData.indexOf(NEWLINE)) >= 0) {
+      let nextLinePosition = remainingData.indexOf(NEWLINE);
+      while (nextLinePosition >= 0) {
         const completeRow = remainingData.slice(0, nextLinePosition + 1);
         remainingData = remainingData.slice(++nextLinePosition);
         importedRowCount++;
